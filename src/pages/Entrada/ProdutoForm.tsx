@@ -1,5 +1,5 @@
 
-import { Box, Button, Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { OpenModal } from "../../components/helpers/OpenModal";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
@@ -7,7 +7,7 @@ import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
 import { AlertError } from "../../components/helpers/AlertError";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -18,6 +18,9 @@ import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoComple
 import { fornecedorSelector } from "../../states/FornecedorState";
 import { categoriaSelector } from "../../states/CategoriaState";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
+import { executeScroll } from "../../components/helpers/ExecuteScroll";
+import { CardGeneric } from "../../components/Card/CardGeneric";
 
 
 interface ProdutoForm {
@@ -37,6 +40,8 @@ interface ProdutoForm {
 export const ProdutoForm = (props: any) => {
 
     const produtoActions = ProdutoActions()
+
+    const cardProdutosRef = useRef<any>(null);
 
     // const [hasError, setHasError] = useState<boolean>(false)
 
@@ -95,73 +100,73 @@ export const ProdutoForm = (props: any) => {
     useEffect(() => {
         if(remove){
             setProdutos(newProdutos)
-            console.log("setou")
         }
     }, [newProdutos, remove])
 
 
     return (
-        <div>
-            <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb', marginTop: 5 }}>
-                <CardContent>
+        <Box sx={{margin: 4, marginTop: 10}}>
+            <CardGeneric title="Produtos">
 
-                    <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                        Produtos
-                    </Typography>
+                    <Collapse in={produtos.length !== 0}>
+                        <Card sx={{ backgroundColor: 'black', width: '300px' }}>
+                            <CardContent>
+                                {produtos.map((produto: any, i: any) => {
+                                    return (
+                                        <>
+                                            <Grid container direction={'row'} sx={{ marginBottom: '5px' }}>
+                                                <Grid item xs={12} md={12} lg={12} xl={1.5} sx={{ marginRight: 1 }}>
+                                                    <Box sx={{ display: 'inline-block' }}>
+                                                        <IconButton onClick={() => removerProduto(i)}><RemoveCircleOutlineIcon sx={{ color: 'red', fontSize: '20px' }} /></IconButton>
+                                                    </Box>
+                                                </Grid>
+                                                <Grid item xs={12} md={12} lg={12} xl={8.5}>
 
-                    {produtos.length !== 0 && <Card sx={{ backgroundColor: 'black', width: '300px' }}>
-                        <CardContent>
-                            {produtos.map((produto: any, i: any) => {
-                                return (
-                                    <>
-                                        <Grid container direction={'row'} sx={{ marginBottom: '5px' }}>
-                                            <Grid item xs={12} md={12} lg={12} xl={1.5} sx={{ marginRight: 1 }}>
-                                                <Box sx={{ display: 'inline-block' }}>
-                                                    <IconButton onClick={() => removerProduto(i)}><RemoveCircleOutlineIcon sx={{ color: 'red', fontSize: '20px' }} /></IconButton>
-                                                </Box>
+                                                    <Box sx={{ display: 'inline-block', marginTop: '1px' }}>
+                                                        <Typography sx={{ color: 'white' }} variant="h5">{produto.nome}</Typography>
+                                                    </Box>
+                                                </Grid>
+                                                <Grid item xs={12} md={12} lg={12} xl={1}>
+
+                                                    <Box sx={{ display: 'inline-block', marginTop: '2px' }}>
+                                                        <Typography sx={{ color: 'yellow' }} variant="h6">{produto.quantidade}</Typography>
+                                                    </Box>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item xs={12} md={12} lg={12} xl={8.5}>
+                                        </>
+                                    )
+                                })}
+                            </CardContent>
+                        </Card>
+                    </Collapse>
+                    
 
-                                                <Box sx={{ display: 'inline-block', marginTop: '1px' }}>
-                                                    <Typography sx={{ color: 'white' }} variant="h5">{produto.nome}</Typography>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={12} md={12} lg={12} xl={1}>
+                    <Collapse in={!cardProdutos}>
+                        <Box sx={{ margin: 2.5 }}>
+                            <Grid container direction={'row'} sx={{}} >
+                                <Grid item xs={12} md={12} lg={4} xl={5}>
+                                </Grid>
 
-                                                <Box sx={{ display: 'inline-block', marginTop: '2px' }}>
-                                                    <Typography sx={{ color: 'yellow' }} variant="h6">{produto.quantidade}</Typography>
-                                                </Box>
-                                            </Grid>
-                                        </Grid>
-                                    </>
-                                )
-                            })}
-                        </CardContent>
-                    </Card>}
+                                <Grid item xs={12} md={12} lg={4} xl={2}>
+                                    <ButtonGeneric fullWidth title='Adicionar produtos' typeIcon="pesquisar" onClick={() => { setCardProdutos(true) }} />
+                                </Grid>
 
-                    {!cardProdutos && <Box sx={{ margin: 2.5 }}>
-                        <Grid container direction={'row'} sx={{}} >
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
+                                <Grid item xs={12} md={12} lg={4} xl={5}>
+                                </Grid>
                             </Grid>
+                        </Box>
+                    </Collapse> 
+                    
 
-                            <Grid item xs={12} md={12} lg={4} xl={2}>
-                                <ButtonGeneric fullWidth title='Adicionar produto' typeIcon="pesquisar" backgroundColor={'#dbdbdb'} color={'black'} backgroundColorHover={'#ffffff'} onClick={() => { setCardProdutos(true) }} />
-                            </Grid>
-
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
-                            </Grid>
-                        </Grid>
-                    </Box>}
-
-                    {cardProdutos &&
-                        <Grid item>
+                    <Collapse in={cardProdutos}>
+                        <Grid item ref={cardProdutosRef}>
                             <form>
                                 <Grid container direction={'column'}>
 
                                     <Grid item>
 
                                         <Grid container
-                                            direction="row" spacing={1.5}>
+                                            direction="row" spacing={1.5} >
                                             <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
                                                 <SearchTable produtoSelecionado={produtoSelecionado} setProdutoSelecionado={setProdutoSelecionado} atomFilter={produtoSearchAtom} selector={produtoSelectorNome} setCardPesquisa={setCardProdutos} reload={reload} setReload={setReload} />
                                             </Grid>
@@ -170,15 +175,7 @@ export const ProdutoForm = (props: any) => {
                                     </Grid>
 
                                     <Grid item>
-
-                                        <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb' }}>
-                                            <CardContent>
-
-                                                <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                                                    Produtos da entrada
-                                                </Typography>
-
-                                                <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
+                                                <Grid container direction={'row'} spacing={1.5} sx={{padding: 10,paddingTop: 5, paddingBottom: 0 }}>
                                                     <Grid item xs={12} md={12} lg={3} xl={3}>
                                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} readOnly />
                                                     </Grid>
@@ -203,31 +200,28 @@ export const ProdutoForm = (props: any) => {
                                                     <Grid item xs={12} md={12} lg={1} xl={1}>
                                                         <TxtFieldForm name={"estoque"} control={control} label={"Estoque Inic."} error={errors.estoque?.message} readOnly />
                                                     </Grid>
-                                                    <Grid item xs={12} md={12} lg={1} xl={5.5} >
+                                                    <Grid item xs={12} md={12} lg={1} xl={4.6} >
                                                     </Grid>
                                                     <Grid item xs={12} md={12} lg={1} xl={1} marginTop={5}>
                                                         <TxtFieldForm name={"quantidade"} control={control} label={"Quantidade"} error={errors.quantidade?.message} borderWidth={2} />
                                                     </Grid>
-                                                    <Grid item xs={12} md={12} lg={1} xl={5.5}>
+                                                    <Grid item xs={12} md={12} lg={1} xl={2} marginTop={5}>
+                                                    <Box sx={{}}>
+                                                        <ButtonGeneric title={'INSERIR PRODUTO'} type="button" height="55px" onClick={insertProduto} />
+                                                    </Box>
                                                     </Grid>
-                                                </Grid>
-
-                                            </CardContent>
-                                        </Card>
+                                                </Grid> 
                                         <Grid item>
-                                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 5 }}>
-                                                <ButtonGeneric title={'INSERIR'} type="button" onClick={insertProduto} />
-                                            </Box>
+                                            
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             </form>
                         </Grid>
-                    }
+                    </Collapse>
 
-                </CardContent>
-            </Card>
-        </div >
+                </CardGeneric>
+        </Box>
     )
 }
 
@@ -247,13 +241,13 @@ const SearchTable = (props: ITableFProdutos) => {
     const columns = [
         {
             disablePadding: false,
-            field: 'editar',
-            label: 'Editar',
+            field: 'selecionar',
+            label: 'Selecionar',
             enableOrder: true,
             align: 'center',
-            width: '10%',
-            itemSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
-            itemNoSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
+            width: '15%',
+            itemSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
+            itemNoSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
             checkField: true
         },
         {
@@ -261,8 +255,8 @@ const SearchTable = (props: ITableFProdutos) => {
             field: 'nome',
             label: 'Nome',
             enableOrder: true,
-            align: "right",
-            width: '10%'
+            align: "left",
+            width: '15%'
 
         },
         {
@@ -270,8 +264,8 @@ const SearchTable = (props: ITableFProdutos) => {
             field: 'fornecedor',
             label: 'Fornecedor',
             enableOrder: true,
-            align: "right",
-            width: '10%'
+            align: "left",
+            width: '15%'
 
         },
         {
@@ -279,8 +273,8 @@ const SearchTable = (props: ITableFProdutos) => {
             field: 'categoria',
             label: 'Categoria',
             enableOrder: true,
-            align: "right",
-            width: '10%'
+            align: "left",
+            width: '15%'
 
         },
         {
@@ -289,7 +283,7 @@ const SearchTable = (props: ITableFProdutos) => {
             label: 'Descriçao',
             enableOrder: true,
             align: "left",
-            width: '70%'
+            width: '40%'
         },
     ]
 

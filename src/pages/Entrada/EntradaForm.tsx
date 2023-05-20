@@ -21,6 +21,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { ClienteActions } from "../../actions/ClienteActions";
 import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelectorNome } from "../../states/ClienteState";
 import { ProdutoForm } from "./ProdutoForm";
+import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
+import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
+import { CardGeneric } from "../../components/Card/CardGeneric";
 
 export interface EntradaForm {
     codigo: string,
@@ -36,8 +39,6 @@ export const Entrada = () => {
     // const entradaActions = entradaActions() 
 
     const [entradaSelecionada, setEntradaSelecionado] = useState<any>(null)
-
-    console.log('re-render')
 
     const [reload, setReload] = useState<any>(false)
 
@@ -98,12 +99,12 @@ export const Entrada = () => {
 
     return (
         <div>
+            <Header />
             <form onSubmit={handleSubmit(onSubmitEntrada)}>
                 <Grid container direction={'column'}>
 
-                    <Typography variant="h5" align="center" sx={{ marginTop: 2, marginBottom: 2, fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green' }}>
-                        Entradas
-                    </Typography>
+                    <TitlePageGeneric title={'Entradas'}/>
+
 
                     {/* {hasError &&
                      <Grid item sx={{ marginBottom: 4 }}>
@@ -139,13 +140,8 @@ export const Entrada = () => {
 
                     <Grid item>
 
-                        <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb' }}>
-                            <CardContent>
-
-                                <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                                    Informações gerais
-                                </Typography>
-
+                        <Box sx={{margin: 2, marginTop: 4}}>
+                            <CardGeneric title="Dados da entrada">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
                                     <Grid item  >
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
@@ -160,16 +156,16 @@ export const Entrada = () => {
                                         <TxtFieldForm name={"cpf"} control={control} label={"CPF"} error={errors.cpf?.message} />
                                     </Grid> */}
                                 </Grid>
-                            </CardContent>
-                        </Card>
-
-                        <ProdutoForm />
+                            </CardGeneric>
+                        </Box>
 
                         <Grid item>
-                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
+                            <Box sx={{margin: 2, display: 'flex', justifyContent: 'flex-end' }}>
                                 <ButtonGeneric title={'cadastrar'} />
                             </Box>
                         </Grid>
+
+                        <ProdutoForm />
                     </Grid>
                 </Grid>
             </form>

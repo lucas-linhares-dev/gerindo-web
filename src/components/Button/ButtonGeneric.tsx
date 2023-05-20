@@ -18,7 +18,8 @@ interface IButtonGeneric {
     backgroundColorHover?: any;
     color?: any;
     typeIcon?: string,
-    fullWidth?: boolean
+    fullWidth?: boolean,
+    height?: string
 }
 
 export const ButtonGeneric = (props: IButtonGeneric) => {
@@ -40,22 +41,23 @@ export const ButtonGeneric = (props: IButtonGeneric) => {
     return (
         <Button 
          sx={{
+            fontFamily: 'Kanit, sans-serif;',
             width: props.fullWidth ? '100%' : null,
             border: 'none',
             marginRight: props.marginRight ? props.marginRight : '20px',
-            backgroundColor: props.backgroundColor ? props.backgroundColor : 'rgb(32, 112, 0)',
+            backgroundColor: props.backgroundColor ? props.backgroundColor : '#006666',
             marginTop: props.marginTop && props.marginTop,   
-            color: props.color || 'white',
-            fontWeight: 'bold', height: '50px',
+            color: props.color || '#f5f5f5',
+            fontWeight: 'bold', height: props.height || '50px',
             transition: 'all .1s linear',
+            fontSize: '17px',
             ':hover': {
-                backgroundColor: props.backgroundColorHover ? props.backgroundColorHover : 'rgb(40, 141, 0)',
+                backgroundColor: props.backgroundColorHover ? props.backgroundColorHover : '#008584',
                 border: 'none',
-                color: 'white',
                 transform: 'translateY(-1px)'
             }
             }} 
-
+            disableRipple
             variant='outlined'
             type={props.type ? props.type : 'submit'}
             endIcon={ typeIcon ? getIconFromName(typeIcon) : <SaveOutlinedIcon />}   

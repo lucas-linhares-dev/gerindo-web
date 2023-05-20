@@ -25,8 +25,6 @@ export const AppRoutes = () => {
                 <Route path="/fornecedor" element={<Fornecedor />} />
                 <Route path="/cliente" element={<Cliente />} />
                 <Route path="/formaPagamento" element={<FormaPagamento />} />
-
-                
                 <Route path="/entrada" element={<Entrada />} />
                 <Route path="/sair" element={<Sair />}/>
             </Routes>

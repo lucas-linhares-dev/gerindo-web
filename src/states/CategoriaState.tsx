@@ -5,7 +5,6 @@ import { atom, selector } from "recoil";
 export const categoriaSelectorNome = selector({
     key: 'categoriaSelectorNome',
     get: async ({ get }) => {
-
         // let page = get(credorPageState)
         // let rowsPerPage = get(credorRowsPerPageState)
 

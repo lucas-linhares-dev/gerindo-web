@@ -6,9 +6,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { ButtonGeneric } from '../Button/ButtonGeneric';
-// import { Scrollbars } from "react-custom-scrollbars";
+import { Scrollbars } from "react-custom-scrollbars";
 import CloseIcon from '@mui/icons-material/Close';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 
 let rowSelected: HTMLElement | null = null
@@ -72,23 +73,23 @@ export default function TableGeneric(props: ITableGeneric) {
     };
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden', backgroundColor: '#eeeeee' }}>
+        <Paper sx={{ width: '100%', overflow: 'hidden', backgroundColor: '#006666' }}>
             <RecoilRoot>
                 <TableToolBarGeneric setItemEdit={props.setItemEdit} setCardPesquisa={props.setCardPesquisa} setReload={props.setReload} enableCustomSearch={props.enableCustomSearch} objFilters={props.objFilters} widthTxtField={props.widthTxtField} title={props.title} atomPage={props.atomPage} atomFilter={props.atomFilter} enableSearch={props.enableSearch} />
                 <TableContainer sx={{ height: props.height }}>
-                    {/* <Scrollbars renderThumbVertical={({ style, ...props }) =>
+                    <Scrollbars renderThumbVertical={({ style, ...props }) =>
                             <Box {...props}
                                 style={{
                                     ...style,
-                                    backgroundColor: 'black',
+                                    backgroundColor: '#f5f5f5',
                                     width: '6px',
                                     marginTop: '55px',
                                     maxHeight: heightScrollBar,
-                                    opacity: '0.3',
+                                    opacity: '0.6',
                                     borderRadius: '50px',
                                 }} />
 
-                        }> */}
+                        }>
                     <Table size={"small"} stickyHeader>
                         <TableHeaderGeneric
                             order={order}
@@ -98,7 +99,7 @@ export default function TableGeneric(props: ITableGeneric) {
                         />
                         <TableContainerGeneric itemEdit={props.itemEdit} reload={props.reload} setReload={props.setReload} tabela={props.tabela} setItemEdit={props.setItemEdit} atomFilter={props.atomFilter} atomSelectorList={props.atomSelectorList} columns={props.columns} order={order} orderBy={orderBy} navigate={navigate} atomRowsPerPage={props.atomRowPerPage} setTamanhoLista={setTamanhoLista} />
                     </Table>
-                    {/* </Scrollbars> */}
+                    </Scrollbars>
                 </TableContainer>
                 {/* {props.enablePagination &&
                     <RecoilRoot override={false}>
@@ -161,7 +162,7 @@ function TableContainerGeneric(props: ITableContainerGeneric) {
                         <TableRow
 
                         >
-                            <TableCell align='center' colSpan={props.columns.length} sx={{ paddingTop: '10em', border: '1px solid transparent' }}><Typography variant='h6' sx={{ fontWeight: 'bold' }}>Sua consulta não retornou nenhum registro</Typography></TableCell>
+                            <TableCell align='center' colSpan={props.columns.length} sx={{ paddingTop: '10em', border: '1px solid transparent' }}><Typography variant='h6' sx={{ fontWeight: 'bold', fontFamily: 'Kanit, sans-serif;', color: '#f5f5f5' }}>Sua consulta não retornou nenhum registro</Typography></TableCell>
                         </TableRow>
                     }
                     {stableSort(contents[props.tabela], getComparator(props.order, props.orderBy))
@@ -185,7 +186,7 @@ function TableContainerGeneric(props: ITableContainerGeneric) {
                 <TableBody>
                     <TableRow
                     >
-                        <TableCell align='center' colSpan={props.columns.length} sx={{ paddingTop: '10em', border: '1px solid transparent' }}><Typography variant='h6' sx={{ fontWeight: 'bold' }}>Buscando...</Typography></TableCell>
+                        <TableCell align='center' colSpan={props.columns.length} sx={{ paddingTop: '10em', border: '1px solid transparent' }}><Typography variant='h6' sx={{ fontWeight: 'bold', fontFamily: 'Kanit, sans-serif;', color: '#f5f5f5' }}>Buscando...</Typography></TableCell>
                     </TableRow>
                 </TableBody>
             )
@@ -266,7 +267,7 @@ function TableHeaderGeneric(props: TableHeaderProps) {
             <TableRow>
                 {props.columns.map((headCell, index) => (
                     <TableCell
-                        sx={{ fontSize: '17px', fontWeight: 'bold', backgroundColor: 'black', paddingTop: '15px', paddingBottom: '15px', color: 'white', whiteSpace: 'nowrap', }}
+                        sx={{ fontSize: '20px', border: 'none' ,fontWeight: '1000', fontFamily: 'Kanit, sans-serif;' ,backgroundColor: '#f5f5f5', paddingTop: '15px', paddingBottom: '15px', color: '#006666', whiteSpace: 'nowrap', }}
                         key={index}
                         align={headCell.align}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -275,10 +276,10 @@ function TableHeaderGeneric(props: TableHeaderProps) {
                         {headCell.enableOrder === true ? <TableSortLabel
                             sx={{
                                 '& .MuiTableSortLabel-icon': {
-                                    color: 'white !important',
+                                    color: '#006666',
                                 },
                                 '&.MuiTableSortLabel-root': {
-                                    color: 'white',
+                                    color: '#006666',
                                 },
                                 '&:hover': { color: 'black' }
                             }}
@@ -334,52 +335,52 @@ function TableToolBarGeneric(props: ITableToolBarGeneric) {
     if (props.enableSearch === true) {
         return (
             <Toolbar>
-                <Box sx={{ width: '100%', textAlign: 'center', marginRight: 10, marginLeft: 21 }}>
+                <Box sx={{ width: '100%', textAlign: 'left', margin: 1, marginRight: 0 }}>
                     <TextField
                         sx={{
                             width: 400,
                             marginTop: 1, marginBottom: 1,
                             '& label.Mui-focused': {
-                                color: 'black',
+                                color: '#f5f5f5',
                             },
                             '& .MuiInput-underline:after': {
-                                borderBottomColor: 'black',
+                                borderBottomColor: '#f5f5f5',
                                 borderWidth: 1
 
                             },
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: 'black',
+                                    borderColor: '#f5f5f5',
                                     borderWidth: 1,
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: 'black',
+                                    borderColor: '#f5f5f5',
                                     borderWidth: 1
 
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: 'black',
+                                    borderColor: '#f5f5f5',
                                     borderWidth: 1
 
                                 },
                             }
                         }}
+                        inputProps={{style: {color: '#f5f5f5'}}}
+                        InputLabelProps={{style: {color: "#f5f5f5",}}}
                         id="txtSearch"
+                        placeholder='Pesquisar'
                         ref={txtFieldSearch}
-                        label="Pesquisar"
+                        label={<SearchIcon sx={{ fontSize: 28 }} />}
                         variant="outlined"
                         onChange={(event: any) => {
                             setValorSearch(event.target.value)
                             // setPage(0)
                             props.setReload(true)
                         }} />
-                    <IconButton sx={{ color: 'black', marginTop: 1 }} aria-label="search" >
-                        <SearchIcon sx={{ fontSize: 35 }} />
-                    </IconButton>
                 </Box>
                 <Box>
-                    <IconButton aria-label="search" sx={{ color: 'red', marginTop: 0 }} onClick={() => { props.setCardPesquisa(false) ; props.setItemEdit(null) }}>
-                        <HighlightOffIcon sx={{ fontSize: 35 }} />
+                    <IconButton aria-label="search" sx={{ color: '#f5f5f5', marginTop: 0, }} onClick={() => { props.setCardPesquisa(false) ; props.setItemEdit(null) }}>
+                        <ArrowUpwardIcon sx={{ fontSize: 30 }} />
                     </IconButton>
                 </Box>
 
@@ -458,7 +459,7 @@ function TableRowGeneric(props: ITableRowGeneric) {
                 lastRowSelected!.style.cssText = 'background-color: transparent'
             }
             rowSelected = document.getElementById(props.row._id)
-            rowSelected!.style.cssText = 'background-color: #c6ffa8'
+            rowSelected!.style.cssText = 'background-color: #008584'
         }
     }
 
@@ -470,19 +471,19 @@ function TableRowGeneric(props: ITableRowGeneric) {
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
             {props.columns.map((column: any, index: any) => {
                 if (column.itemSelected !== undefined && column.itemSelected !== null && props.itemEdit !== null && props.itemEdit !== undefined && props.row._id === props.itemEdit._id) {
-                    return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1rem' }, }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'} onClick={onClickItemEdit}>{column.itemSelected}</TableCell>)
+                    return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1.1rem', color: '#f5f5f5', fontFamily: 'Kanit, sans-serif;' }, }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'} onClick={onClickItemEdit}>{column.itemSelected}</TableCell>)
                 }
                 if (column.itemSelected !== undefined && (props.itemEdit === null || props.itemEdit === undefined || props.row._id !== props.itemEdit._id)) {
-                    return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1rem' }, }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'} onClick={onClickItemEdit}>{column.itemNoSelected}</TableCell>)
+                    return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1.1rem', color: '#f5f5f5', fontFamily: 'Kanit, sans-serif;' }, }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'} onClick={onClickItemEdit}>{column.itemNoSelected}</TableCell>)
                 }
                 if (props.row[column.field] !== null && props.row[column.field] !== undefined) {
                     if (column.subField !== null && column.subField !== undefined) {
-                        return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1rem' } }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'}>{props.row[column.field][column.subField]}</TableCell>)
+                        return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1.1rem', color: '#f5f5f5', fontFamily: 'Kanit, sans-serif;' } }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'}>{props.row[column.field][column.subField]}</TableCell>)
                     } else {
-                        return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1rem' } }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'}>{props.row[column.field]}</TableCell>)
+                        return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1.1rem', color: '#f5f5f5', fontFamily: 'Kanit, sans-serif;' } }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'}>{props.row[column.field]}</TableCell>)
                     }
                 } else {
-                    return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1rem' } }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'}></TableCell>)
+                    return (<TableCell sx={{ height: '60px', '&.MuiTableCell-root': { fontSize: '1.1rem', color: '#f5f5f5', fontFamily: 'Kanit, sans-serif;' } }} style={{ whiteSpace: 'nowrap' }} key={index} width={column.width} align={column.align} scope='row' padding={column.disablePadding ? 'none' : 'normal'}></TableCell>)
                 }
 
             })}

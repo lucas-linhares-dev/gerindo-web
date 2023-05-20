@@ -182,7 +182,7 @@ export const AutoCompleteForm = (props: IAutoCompleteForm) => {
                             <TextField
                                 {...params}
                                 label={props.label}
-                                InputLabelProps={{ style: { color: props.error ? "#e4605e" : "#094b00d1", fontSize: '1.2rem'} }} 
+                                InputLabelProps={{ style: { color: props.error ? "#e4605e" : "#094b00d1", fontSize: '1.2rem', fontFamily: 'Kanit, sans-serif;'} }} 
                                 sx={{
 
                                     "& .MuiInputBase-input.Mui-disabled": {
