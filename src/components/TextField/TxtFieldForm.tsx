@@ -22,20 +22,21 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
                 <>
                     <TextField
                         inputProps={{ style: { textAlign: 'left' } }}
-                        InputLabelProps={{ style: { color: props.error ? "#df2320" : "#094b00d1", fontSize: '1.2rem', } }} 
+                        InputLabelProps={{ style: { color: props.error ? "#df2320" : "#008584", fontSize: '1.2rem', fontFamily: 'Kanit, sans-serif;', font: 'Kanit, sans-serif;' } }} 
                         sx={{
                             width: 1,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor:props. error ? "#e20400" : "#2B7C41",
+                                    borderColor:props. error ? "#e20400" : "#008584",
                                     borderWidth: props.borderWidth || 1,
                                     fontSize: '1.16rem',
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: props.error ? "#e20400" : "#2B7C41",
+                                    borderColor: props.error ? "#e20400" : "#008584",
+                                    
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: props.error ? "#e20400" : "#2B7C41",
+                                    borderColor: props.error ? "#e20400" : "#008584",
                                 },
                             },
                             '& input[type=number]': {

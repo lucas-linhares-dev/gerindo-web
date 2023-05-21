@@ -1,5 +1,5 @@
 
-import { Box, Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
@@ -16,6 +16,8 @@ import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { useRecoilState } from "recoil";
 import { FormaPagamentoActions } from "../../actions/FormaPagamentoActions";
 import { formaPagamentoPageState, formaPagamentoRowsPerPageState, formaPagamentoSearchAtom, formaPagamentoSelectorNome } from "../../states/FormaPagamentoState";
+import { CardGeneric } from "../../components/Card/CardGeneric";
+import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 
 interface FormasPagamentoForm {
     nome: string,
@@ -27,7 +29,7 @@ export const FormaPagamento = () => {
     const formaPagamentoActions = FormaPagamentoActions()
 
     // const [hasError, setHasError] = useState<boolean>(false)
-    
+
     const [formaPagamentoSelecionada, setFormaPagamentoSelecionada] = useState<any>(null)
 
     const [reload, setReload] = useState<any>(false)
@@ -52,13 +54,13 @@ export const FormaPagamento = () => {
 
 
     const onSubmitFormaPagamento = async (data: any) => {
-        if(formaPagamentoSelecionada === null){
+        if (formaPagamentoSelecionada === null) {
             const confirm = await OpenModalConfirm("Cadastrar forma de pagamento?")
-            if(confirm){
+            if (confirm) {
                 formaPagamentoActions.formaPagamentoInsert(data).then((res: any) => {
                     if (res.status === 200) {
                         OpenModal(`Forma de pagamento cadastrada com sucesso!`, () => { })
-                        reset({...initialValues})
+                        reset({ ...initialValues })
                     }
                     else {
                         console.log("ERROS BACK END")
@@ -66,12 +68,12 @@ export const FormaPagamento = () => {
                 })
             }
         }
-        else{
+        else {
             const confirm = await OpenModalConfirm("Alterar forma de pagamento?")
-            if(confirm){
+            if (confirm) {
                 formaPagamentoActions.formaPagamentoUpdate(data).then((res: any) => {
-                    if(res.status === 200){
-                        OpenModal("Forma de pagamento alterada com sucesso!", () => {})
+                    if (res.status === 200) {
+                        OpenModal("Forma de pagamento alterada com sucesso!", () => { })
                         setFormaPagamentoSelecionada(res.data)
                         setReload(true)
                     }
@@ -85,24 +87,24 @@ export const FormaPagamento = () => {
 
     const excluirFormaPagamento = async () => {
         const confirm = await OpenModalConfirm("Excluir forma de pagamento?")
-        if(confirm){
-                const res = await formaPagamentoActions.formaPagamentoExcluir(formaPagamentoSelecionada._id)
-                if(res?.status === 200){
-                    OpenModal("Forma de pagamento excluida com sucesso!", () => {})
-                    setReload(true)
-                    setFormaPagamentoSelecionada(null)
-                }
-                else {
-                    console.log("ERROS BACK END")
-                }
+        if (confirm) {
+            const res = await formaPagamentoActions.formaPagamentoExcluir(formaPagamentoSelecionada._id)
+            if (res?.status === 200) {
+                OpenModal("Forma de pagamento excluida com sucesso!", () => { })
+                setReload(true)
+                setFormaPagamentoSelecionada(null)
+            }
+            else {
+                console.log("ERROS BACK END")
+            }
         }
     }
 
     useEffect(() => {
-        if(formaPagamentoSelecionada != null){
+        if (formaPagamentoSelecionada != null) {
             reset(formaPagamentoSelecionada)
         } else {
-            reset({ ...initialValues})
+            reset({ ...initialValues })
         }
     }, [formaPagamentoSelecionada])
 
@@ -112,9 +114,7 @@ export const FormaPagamento = () => {
             <form onSubmit={handleSubmit(onSubmitFormaPagamento)}>
                 <Grid container direction={'column'}>
 
-                    <Typography variant="h5" align="center" sx={{ marginTop: 2, marginBottom: 2, fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green' }}>
-                        Formas de pagamento
-                    </Typography>
+                    <TitlePageGeneric title="Formas de pagamento" />
 
                     {/* {hasError &&
                      <Grid item sx={{ marginBottom: 4 }}>
@@ -122,58 +122,48 @@ export const FormaPagamento = () => {
                     </Grid>
                     } */}
 
-                    <Box sx={{ margin: 2.5 }}>
-                        <Grid container direction={'row'} sx={{  }} >
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
+                    <Collapse in={!cardPesquisar}>
+                        <Box sx={{ marginTop: 5, marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                            <ButtonGeneric buttonPesquisar title='Pesquisar' typeIcon="pesquisar" type="button" onClick={() => { setCardPesquisar(true) }} />
+                        </Box>
+                    </Collapse>
+
+                    <Collapse in={cardPesquisar}>
+
+                        <Grid item sx={{ marginTop: 2 }}>
+
+                            <Grid container
+                                direction="row" spacing={1.5}>
+                                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
+                                    <TableFormasPagamento formaPagamentoSelecionada={formaPagamentoSelecionada} setFormaPagamentoSelecionada={setFormaPagamentoSelecionada} atomFilter={formaPagamentoSearchAtom} selector={formaPagamentoSelectorNome} setCardPesquisa={setCardPesquisar} reload={reload} setReload={setReload} />
+                                </Grid>
                             </Grid>
 
-                            {!cardPesquisar && <Grid item xs={12} md={12} lg={4} xl={2}>
-                                <ButtonGeneric fullWidth title='pesquisar' typeIcon="pesquisar" backgroundColor={'#dbdbdb'} color={'black'} backgroundColorHover={'#ffffff'} onClick={() => { setCardPesquisar(true) }} />
-                            </Grid>}
-
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
-                            </Grid>
                         </Grid>
-                    </Box>
+                    </Collapse>
 
-                    {cardPesquisar &&
-                    <Grid item>
-
-                        <Grid container
-                            direction="row" spacing={1.5}>
-                            <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                <TableFormasPagamento formaPagamentoSelecionada={formaPagamentoSelecionada} setFormaPagamentoSelecionada={setFormaPagamentoSelecionada} atomFilter={formaPagamentoSearchAtom} selector={formaPagamentoSelectorNome} setCardPesquisa={setCardPesquisar} reload={reload} setReload={setReload}  />
-                            </Grid>
-                        </Grid>
-
-                    </Grid>}
 
                     <Grid item>
 
-                        <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb' }}>
-                            <CardContent>
-
-                                <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                                    Informações gerais
-                                </Typography>
-
+                        <Box sx={{ margin: 2, marginTop: 4 }}>
+                            <CardGeneric title="Informações gerais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
                                     <Grid item xs={12} md={12} lg={5} xl={5}>
-                                        <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message}  />
+                                        <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={7} xl={7}>
-                                        <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message}  />
+                                        <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message} />
                                     </Grid>
                                 </Grid>
+                            </CardGeneric>
+                        </Box>
 
-                            </CardContent>
-                        </Card>
                         <Grid item>
-                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end'  }}>
-                                    {formaPagamentoSelecionada &&
-                                        <ButtonGeneric title='excluir' color={'red'}  typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirFormaPagamento} />
-                                    }
-                                    <ButtonGeneric title={formaPagamentoSelecionada ? 'alterar' :'cadastrar' } />
+                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
+                                {formaPagamentoSelecionada &&
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirFormaPagamento} />
+                                }
+                                <ButtonGeneric title={formaPagamentoSelecionada ? 'alterar' : 'cadastrar'} />
                             </Box>
                         </Grid>
                     </Grid>

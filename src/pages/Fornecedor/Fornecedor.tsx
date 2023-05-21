@@ -1,5 +1,5 @@
 
-import { Box, Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
@@ -18,6 +18,8 @@ import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { FornecedorActions } from "../../actions/FornecedorActions";
 import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, fornecedorSelector, fornecedorSelectorNome } from "../../states/FornecedorState";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
+import { CardGeneric } from "../../components/Card/CardGeneric";
 
 interface FornecedorForm {
     nome: string,
@@ -28,7 +30,7 @@ interface FornecedorForm {
 
 export const Fornecedor = () => {
 
-    const fornecedorActions = FornecedorActions() 
+    const fornecedorActions = FornecedorActions()
 
     const [fornecedorSelecionado, setFornecedorSelecionado] = useState<any>(null)
 
@@ -47,7 +49,7 @@ export const Fornecedor = () => {
             telefone: '',
             cnpj: ''
         }
-    }, []) 
+    }, [])
 
     const validationSchema = yup.object().shape({
         nome: yup.string()
@@ -64,27 +66,27 @@ export const Fornecedor = () => {
 
 
     const onSubmitFornecedor = async (data: any) => {
-        if(fornecedorSelecionado === null){
+        if (fornecedorSelecionado === null) {
             const confirm = await OpenModalConfirm("Cadastrar fornecedor?")
-            if(confirm){
+            if (confirm) {
                 fornecedorActions.fornecedorInsert(data).then((res: any) => {
                     if (res.status === 200) {
                         OpenModal(`Fornecedor cadastrado com sucesso!`, () => { })
                         setReload(true)
-                        reset({...initialValues})
+                        reset({ ...initialValues })
                     }
                     else {
                         console.log("ERROS BACK END")
-                    } 
+                    }
                 })
             }
         }
         else {
             const confirm = await OpenModalConfirm("Alterar fornecedor?")
-            if(confirm){
+            if (confirm) {
                 fornecedorActions.fornecedorUpdate(data).then((res: any) => {
-                    if(res.status === 200){
-                        OpenModal("Fornecedor alterado com sucesso!", () => {})
+                    if (res.status === 200) {
+                        OpenModal("Fornecedor alterado com sucesso!", () => { })
                         setFornecedorSelecionado(res.data)
                         setReload(true)
                     }
@@ -98,24 +100,24 @@ export const Fornecedor = () => {
 
     const excluirFornecedor = async () => {
         const confirm = await OpenModalConfirm("Excluir fornecedor?")
-        if(confirm){
-                const res = await fornecedorActions.fornecedorExcluir(fornecedorSelecionado._id)
-                if(res?.status === 200){
-                    OpenModal("Fornecedor excluido com sucesso!", () => {})
-                    setReload(true)
-                    setFornecedorSelecionado(null)
-                }
-                else {
-                    console.log("ERROS BACK END")
-                }
+        if (confirm) {
+            const res = await fornecedorActions.fornecedorExcluir(fornecedorSelecionado._id)
+            if (res?.status === 200) {
+                OpenModal("Fornecedor excluido com sucesso!", () => { })
+                setReload(true)
+                setFornecedorSelecionado(null)
+            }
+            else {
+                console.log("ERROS BACK END")
+            }
         }
     }
 
     useEffect(() => {
-        if(fornecedorSelecionado != null){
+        if (fornecedorSelecionado != null) {
             reset(fornecedorSelecionado)
         } else {
-            reset({ ...initialValues})
+            reset({ ...initialValues })
         }
     }, [fornecedorSelecionado, initialValues, reset])
 
@@ -125,51 +127,37 @@ export const Fornecedor = () => {
             <form onSubmit={handleSubmit(onSubmitFornecedor)}>
                 <Grid container direction={'column'}>
 
-                    <Typography variant="h5" align="center" sx={{ marginTop: 2, marginBottom: 2, fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green' }}>
-                        Fornecedor
-                    </Typography>
+                    <TitlePageGeneric title="Fornecedores" />
 
                     {/* {hasError &&
-                     <Grid item sx={{ marginBottom: 4 }}>
-                        <AlertError title={"Atenção"} type={'warning'} style={'filled'} msgError="As senhas informadas não condizem!" />
-                    </Grid>
-                    } */}
-
-                    <Box sx={{ margin: 2.5 }}>
-                        <Grid container direction={'row'} sx={{  }} >
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
-                            </Grid>
-
-                            {!cardPesquisar && <Grid item xs={12} md={12} lg={4} xl={2}>
-                                <ButtonGeneric fullWidth title='pesquisar' typeIcon="pesquisar" backgroundColor={'#dbdbdb'} color={'black'} backgroundColorHover={'#ffffff'} onClick={() => { setCardPesquisar(true) }} />
-                            </Grid>}
-
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
-                            </Grid>
+                        <Grid item sx={{ marginBottom: 4 }}>
+                            <AlertError title={"Atenção"} type={'warning'} style={'filled'} msgError="As senhas informadas não condizem!" />
                         </Grid>
-                    </Box>
+                        } */}
 
-                    {cardPesquisar &&
-                    <Grid item>
+                    <Collapse in={!cardPesquisar}>
+                        <Box sx={{ marginTop: 5, marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                            <ButtonGeneric buttonPesquisar title='Pesquisar' typeIcon="pesquisar" type="button" onClick={() => { setCardPesquisar(true) }} />
+                        </Box>
+                    </Collapse>
 
-                        <Grid container
-                            direction="row" spacing={1.5}>
-                            <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                <TableFornecedores reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} fornecedorSelecionado={fornecedorSelecionado} setFornecedorSelecionado={setFornecedorSelecionado} atomFilter={fornecedorSearchAtom} selector={fornecedorSelectorNome} />
+                    <Collapse in={cardPesquisar}>
+                        <Grid item sx={{ marginTop: 2 }}>
+
+                            <Grid container
+                                direction="row" spacing={1.5}>
+                                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
+                                    <TableFornecedores reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} fornecedorSelecionado={fornecedorSelecionado} setFornecedorSelecionado={setFornecedorSelecionado} atomFilter={fornecedorSearchAtom} selector={fornecedorSelectorNome} />
+                                </Grid>
                             </Grid>
-                        </Grid>
 
-                    </Grid>}
+                        </Grid>
+                    </Collapse>
 
                     <Grid item>
 
-                        <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb' }}>
-                            <CardContent>
-
-                                <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                                    Informações gerais
-                                </Typography>
-
+                        <Box sx={{ margin: 2, marginTop: 4 }}>
+                            <CardGeneric title="Informações gerais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
                                     <Grid item xs={12} md={12} lg={3} xl={3}>
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
@@ -184,15 +172,16 @@ export const Fornecedor = () => {
                                         <TxtFieldForm name={"cnpj"} control={control} label={"CNPJ"} error={errors.cnpj?.message} />
                                     </Grid>
                                 </Grid>
+                            </CardGeneric>
+                        </Box>
 
-                            </CardContent>
-                        </Card>
+
                         <Grid item>
-                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end'  }}>
-                                    {fornecedorSelecionado &&
-                                        <ButtonGeneric title='excluir' color={'red'}  typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirFornecedor} />
-                                    }
-                                    <ButtonGeneric title={fornecedorSelecionado ? 'alterar' :'cadastrar' } />
+                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
+                                {fornecedorSelecionado &&
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirFornecedor} />
+                                }
+                                <ButtonGeneric title={fornecedorSelecionado ? 'alterar' : 'cadastrar'} />
                             </Box>
                         </Grid>
                     </Grid>
@@ -277,5 +266,5 @@ const TableFornecedores = (props: ITableFornecedores) => {
     return (
         <TableGeneric atomPage={fornecedorPageState} atomRowPerPage={fornecedorRowsPerPageState} setCardPesquisa={props.setCardPesquisa} reload={props.reload} setReload={props.setReload} tabela="fornecedores" title='Pesquisar' setItemEdit={props.setFornecedorSelecionado} itemEdit={props.fornecedorSelecionado} atomFilter={props.atomFilter} atomSelectorList={props.selector} columns={columns} widthTxtField={"200px"} enableSearch={true} enablePagination={false} height={400} />
     )
-}   
+}
 

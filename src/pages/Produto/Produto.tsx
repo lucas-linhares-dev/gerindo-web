@@ -1,5 +1,5 @@
 
-import { Box, Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
@@ -17,6 +17,8 @@ import { produtoPageState, produtoRowsPerPageState, produtoSearchAtom, produtoSe
 import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
 import { fornecedorSelector } from "../../states/FornecedorState";
 import { categoriaSelector } from "../../states/CategoriaState";
+import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
+import { CardGeneric } from "../../components/Card/CardGeneric";
 
 interface ProdutoForm {
     nome: string,
@@ -49,17 +51,17 @@ export const Produto = () => {
             preco_custo: '',
             codigo: '',
             estoque: 0,
-            categoria: undefined, 
-            fornecedor: undefined 
+            categoria: undefined,
+            fornecedor: undefined
         }
-    }, []) 
-    
+    }, [])
+
     const validationSchema = yup.object().shape({
         nome: yup.string()
             .required("Campo obrigatório")
             .min(3, 'Mínimo 3 letras'),
         preco_venda: yup.string()
-            .required("Campo obrigatório") 
+            .required("Campo obrigatório")
     })
 
     const { handleSubmit, formState: { errors }, control, reset } = useForm<ProdutoForm>({
@@ -68,29 +70,29 @@ export const Produto = () => {
 
 
     const onSubmitProduto = async (data: any) => {
-        if(produtoSelecionado === null){
-            const confirm = await OpenModalConfirm("Cadastrar produto?") 
-            if(confirm){
+        if (produtoSelecionado === null) {
+            const confirm = await OpenModalConfirm("Cadastrar produto?")
+            if (confirm) {
                 produtoActions.produtoInsert(data).then((res: any) => {
                     if (res.status === 200) {
                         OpenModal(`Produto cadastrado com sucesso!`, () => { })
-                        reset({...initialValues})
+                        reset({ ...initialValues })
                         setReload(true)
                     }
                     else {
                         console.log("ERROS BACK END")
-                    } 
+                    }
                 })
             }
         }
         else {
             const confirm = await OpenModalConfirm("Alterar produto?")
-            if(confirm){
+            if (confirm) {
                 console.log(data)
                 produtoActions.produtoUpdate(data).then((res: any) => {
-                    if(res.status === 200){
+                    if (res.status === 200) {
                         console.log(res.data)
-                        OpenModal("Produto alterado com sucesso!", () => {})
+                        OpenModal("Produto alterado com sucesso!", () => { })
                         setProdutoSelecionado(res.data)
                         setReload(true)
                     }
@@ -104,25 +106,25 @@ export const Produto = () => {
 
     const excluirProduto = async () => {
         const confirm = await OpenModalConfirm("Excluir produto?")
-        if(confirm){
-                const res = await produtoActions.produtoExcluir(produtoSelecionado._id)
-                if(res?.status === 200){
-                    OpenModal("Produto excluido com sucesso!", () => {})
-                    setReload(true)
-                    setProdutoSelecionado(null)
-                }
-                else {
-                    console.log("ERROS BACK END")
-                }
+        if (confirm) {
+            const res = await produtoActions.produtoExcluir(produtoSelecionado._id)
+            if (res?.status === 200) {
+                OpenModal("Produto excluido com sucesso!", () => { })
+                setReload(true)
+                setProdutoSelecionado(null)
+            }
+            else {
+                console.log("ERROS BACK END")
+            }
         }
     }
 
     useEffect(() => {
-        if(produtoSelecionado != null){
+        if (produtoSelecionado != null) {
             reset(produtoSelecionado)
             window.scrollTo(0, 1000)
         } else {
-            reset({ ...initialValues})
+            reset({ ...initialValues })
         }
     }, [initialValues, produtoSelecionado, reset])
 
@@ -132,9 +134,7 @@ export const Produto = () => {
             <form onSubmit={handleSubmit(onSubmitProduto)}>
                 <Grid container direction={'column'}>
 
-                    <Typography variant="h5" align="center" sx={{ marginTop: 2, marginBottom: 2, fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green' }}>
-                        Produto
-                    </Typography>
+                    <TitlePageGeneric title="Produtos" />
 
                     {/* {hasError &&
                      <Grid item sx={{ marginBottom: 4 }}>
@@ -142,76 +142,66 @@ export const Produto = () => {
                     </Grid>
                     } */}
 
-                    <Box sx={{ margin: 2.5 }}>
-                        <Grid container direction={'row'} sx={{  }} >
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
+                    <Collapse in={!cardPesquisar}>
+                        <Box sx={{ marginTop: 5,  marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                            <ButtonGeneric buttonPesquisar title='Pesquisar' typeIcon="pesquisar" type="button" onClick={() => { setCardPesquisar(true) }} />
+                        </Box>
+                    </Collapse>
+
+
+                    <Collapse in={cardPesquisar}>
+                        <Grid item sx={{marginTop: 2}}>
+
+                            <Grid container
+                                direction="row" spacing={1.5}>
+                                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
+                                    <SearchTable produtoSelecionado={produtoSelecionado} setProdutoSelecionado={setProdutoSelecionado} atomFilter={produtoSearchAtom} selector={produtoSelectorNome} setCardPesquisa={setCardPesquisar} reload={reload} setReload={setReload} />
+                                </Grid>
                             </Grid>
 
-                            {!cardPesquisar && <Grid item xs={12} md={12} lg={4} xl={2}>
-                                <ButtonGeneric fullWidth title='pesquisar' typeIcon="pesquisar" backgroundColor={'#dbdbdb'} color={'black'} backgroundColorHover={'#ffffff'} onClick={() => { setCardPesquisar(true) }} />
-                            </Grid>}
-
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
-                            </Grid>
                         </Grid>
-                    </Box>
+                    </Collapse>
 
-                    {cardPesquisar &&
-                    <Grid item>
-
-                        <Grid container
-                            direction="row" spacing={1.5}>
-                            <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                <SearchTable produtoSelecionado={produtoSelecionado} setProdutoSelecionado={setProdutoSelecionado} atomFilter={produtoSearchAtom} selector={produtoSelectorNome} setCardPesquisa={setCardPesquisar} reload={reload} setReload={setReload} />
-                            </Grid>
-                        </Grid>
-
-                    </Grid>}
 
                     <Grid item>
-
-                        <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb' }}>
-                            <CardContent>
-
-                                <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                                    Informações gerais
-                                </Typography>
-
+                        <Box sx={{margin: 2, marginTop: 4}}>
+                            <CardGeneric title={"Informações gerais"}>
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
                                     <Grid item xs={12} md={12} lg={3} xl={3}>
-                                        <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message}  />
+                                        <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={6} xl={6}>
-                                        <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message}  />
+                                        <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={1.5} xl={1.5}>
-                                        <TxtFieldForm name={"preco_venda"} control={control} label={"Preço de venda"} error={errors.preco_venda?.message}  />
+                                        <TxtFieldForm name={"preco_venda"} control={control} label={"Preço de venda"} error={errors.preco_venda?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={1.5} xl={1.5}>
-                                        <TxtFieldForm name={"preco_custo"} control={control} label={"Preço de custo"} error={errors.preco_custo?.message}  />
+                                        <TxtFieldForm name={"preco_custo"} control={control} label={"Preço de custo"} error={errors.preco_custo?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={3} xl={3}>
-                                        <TxtFieldForm name={"codigo"} control={control} label={"Codigo de barras"} error={errors.codigo?.message}  />
+                                        <TxtFieldForm name={"codigo"} control={control} label={"Codigo de barras"} error={errors.codigo?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={4} xl={4}>
-                                        <GetAutoCompleteForm label={"Categoria"} name={"categoria"} control={control} selector={categoriaSelector} optionLabel={"nome"} />                                    
+                                        <GetAutoCompleteForm label={"Categoria"} name={"categoria"} control={control} selector={categoriaSelector} optionLabel={"nome"} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={4} xl={4}>
                                         <GetAutoCompleteForm label={"Fornecedor"} name={"fornecedor"} control={control} selector={fornecedorSelector} optionLabel={"nome"} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={1} xl={1}>
-                                        <TxtFieldForm name={"estoque"} control={control} label={"Estoque Inic."} error={errors.estoque?.message}  />
+                                        <TxtFieldForm name={"estoque"} control={control} label={"Estoque Inic."} error={errors.estoque?.message} />
                                     </Grid>
                                 </Grid>
+                            </CardGeneric>
+                        </Box>
 
-                            </CardContent>
-                        </Card>
+
                         <Grid item>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 5}}>
-                                    {produtoSelecionado &&
-                                        <ButtonGeneric title='excluir' color={'red'}  typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirProduto} />
-                                    }
-                                    <ButtonGeneric title={produtoSelecionado ? 'alterar' :'cadastrar' } />
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: 2 }}>
+                                {produtoSelecionado &&
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirProduto} />
+                                }
+                                <ButtonGeneric title={produtoSelecionado ? 'alterar' : 'cadastrar'} />
                             </Box>
                         </Grid>
                     </Grid>

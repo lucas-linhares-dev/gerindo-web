@@ -1,5 +1,5 @@
 
-import { Box, Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
@@ -16,6 +16,8 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { categoriaPageState, categoriaRowsPerPageState, categoriaSearchAtom, categoriaSelectorNome } from "../../states/CategoriaState";
 import { useRecoilState } from "recoil";
+import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
+import { CardGeneric } from "../../components/Card/CardGeneric";
 
 
 interface CategoriaForm {
@@ -28,7 +30,7 @@ export const Categoria = () => {
     const categoriaActions = CategoriaActions()
 
     // const [hasError, setHasError] = useState<boolean>(false)
-    
+
     const [categoriaSearch, setCategoriaSearch] = useRecoilState(categoriaSearchAtom)
     const [categoriaSelecionada, setCategoriaSelecionada] = useState<any>(null)
 
@@ -54,13 +56,13 @@ export const Categoria = () => {
 
 
     const onSubmitCategoria = async (data: any) => {
-        if(categoriaSelecionada === null){
+        if (categoriaSelecionada === null) {
             const confirm = await OpenModalConfirm("Cadastrar categoria?")
-            if(confirm){
+            if (confirm) {
                 categoriaActions.categoriaInsert(data).then((res: any) => {
                     if (res.status === 200) {
                         OpenModal(`Categoria cadastrada com sucesso!`, () => { })
-                        reset({...initialValues})
+                        reset({ ...initialValues })
                     }
                     else {
                         console.log("ERROS BACK END")
@@ -68,12 +70,12 @@ export const Categoria = () => {
                 })
             }
         }
-        else{
+        else {
             const confirm = await OpenModalConfirm("Alterar categoria?")
-            if(confirm){
+            if (confirm) {
                 categoriaActions.categoriaUpdate(data).then((res: any) => {
-                    if(res.status === 200){
-                        OpenModal("Categoria alterada com sucesso!", () => {})
+                    if (res.status === 200) {
+                        OpenModal("Categoria alterada com sucesso!", () => { })
                         setCategoriaSelecionada(res.data)
                         setReload(true)
                     }
@@ -87,24 +89,24 @@ export const Categoria = () => {
 
     const excluirCategoria = async () => {
         const confirm = await OpenModalConfirm("Excluir categoria?")
-        if(confirm){
-                const res = await categoriaActions.categoriaExcluir(categoriaSelecionada._id)
-                if(res?.status === 200){
-                    OpenModal("Categoria excluida com sucesso!", () => {})
-                    setReload(true)
-                    setCategoriaSelecionada(null)
-                }
-                else {
-                    console.log("ERROS BACK END")
-                }
+        if (confirm) {
+            const res = await categoriaActions.categoriaExcluir(categoriaSelecionada._id)
+            if (res?.status === 200) {
+                OpenModal("Categoria excluida com sucesso!", () => { })
+                setReload(true)
+                setCategoriaSelecionada(null)
+            }
+            else {
+                console.log("ERROS BACK END")
+            }
         }
     }
 
     useEffect(() => {
-        if(categoriaSelecionada != null){
+        if (categoriaSelecionada != null) {
             reset(categoriaSelecionada)
         } else {
-            reset({ ...initialValues})
+            reset({ ...initialValues })
         }
     }, [categoriaSelecionada])
 
@@ -114,9 +116,7 @@ export const Categoria = () => {
             <form onSubmit={handleSubmit(onSubmitCategoria)}>
                 <Grid container direction={'column'}>
 
-                    <Typography variant="h5" align="center" sx={{ marginTop: 2, marginBottom: 2, fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green' }}>
-                        Categoria
-                    </Typography>
+                    <TitlePageGeneric title="Categorias" />
 
                     {/* {hasError &&
                      <Grid item sx={{ marginBottom: 4 }}>
@@ -124,58 +124,44 @@ export const Categoria = () => {
                     </Grid>
                     } */}
 
-                    <Box sx={{ margin: 2.5 }}>
-                        <Grid container direction={'row'} sx={{  }} >
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
+                    <Collapse in={!cardPesquisar}>
+                        <Box sx={{ marginTop: 5, marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                            <ButtonGeneric buttonPesquisar title='Pesquisar' typeIcon="pesquisar" type="button" onClick={() => { setCardPesquisar(true) }} />
+                        </Box>
+                    </Collapse>
+
+                    <Collapse in={cardPesquisar}>
+
+                        <Grid item sx={{ marginTop: 2 }}>
+                            <Grid container
+                                direction="row" spacing={1.5}>
+                                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
+                                    <TableCategorias categoriaSelecionada={categoriaSelecionada} setCategoriaSelecionada={setCategoriaSelecionada} atomFilter={categoriaSearchAtom} selector={categoriaSelectorNome} setCardPesquisa={setCardPesquisar} reload={reload} setReload={setReload} />
+                                </Grid>
                             </Grid>
 
-                            {!cardPesquisar && <Grid item xs={12} md={12} lg={4} xl={2}>
-                                <ButtonGeneric fullWidth title='pesquisar' typeIcon="pesquisar" backgroundColor={'#dbdbdb'} color={'black'} backgroundColorHover={'#ffffff'} onClick={() => { setCardPesquisar(true) }} />
-                            </Grid>}
-
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
-                            </Grid>
                         </Grid>
-                    </Box>
-
-                    {cardPesquisar &&
-                    <Grid item>
-
-                        <Grid container
-                            direction="row" spacing={1.5}>
-                            <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                <TableCategorias categoriaSelecionada={categoriaSelecionada} setCategoriaSelecionada={setCategoriaSelecionada} atomFilter={categoriaSearchAtom} selector={categoriaSelectorNome} setCardPesquisa={setCardPesquisar} reload={reload} setReload={setReload}  />
-                            </Grid>
-                        </Grid>
-
-                    </Grid>}
+                    </Collapse>
 
                     <Grid item>
-
-                        <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb' }}>
-                            <CardContent>
-
-                                <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                                    Informações gerais
-                                </Typography>
-
+                        <Box sx={{ margin: 2, marginTop: 4 }}>
+                            <CardGeneric title="Informações gerais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
                                     <Grid item xs={12} md={12} lg={5} xl={5}>
-                                        <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message}  />
+                                        <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={7} xl={7}>
-                                        <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message}  />
+                                        <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message} />
                                     </Grid>
                                 </Grid>
-
-                            </CardContent>
-                        </Card>
+                            </CardGeneric>
+                        </Box>
                         <Grid item>
-                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end'  }}>
-                                    {categoriaSelecionada &&
-                                        <ButtonGeneric title='excluir' color={'red'}  typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button"onClick={excluirCategoria} />
-                                    }
-                                    <ButtonGeneric title={categoriaSelecionada ? 'alterar' :'cadastrar' } />
+                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
+                                {categoriaSelecionada &&
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirCategoria} />
+                                }
+                                <ButtonGeneric title={categoriaSelecionada ? 'alterar' : 'cadastrar'} />
                             </Box>
                         </Grid>
                     </Grid>

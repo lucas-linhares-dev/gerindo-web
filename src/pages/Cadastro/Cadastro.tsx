@@ -1,5 +1,5 @@
 
-import { Card, CardContent, Grid, Typography } from "@mui/material";
+import { Card, CardContent, Grid, Typography, createTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { UsuarioActions } from "../../actions/UsuarioActions";
 import { OpenModal } from "../../components/helpers/OpenModal";
@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from  'yup'
 import { AlertError } from "../../components/helpers/AlertError";
 import { useState } from "react";
+import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 
 
 interface CadastroForm {
@@ -71,11 +72,9 @@ export const Cadastro = () => {
 
                             </Grid>
                             <Grid item xs={12} md={6} lg={5} xl={4}>
-                                <Card sx={{margin: 5, marginTop: 15, backgroundColor: 'rgb(242, 255, 220, 50%)', borderRadius: '10px', }}>
+                                <Card sx={{margin: 5, marginTop: 15, backgroundColor: 'transparent', borderRadius: '10px', }}>
                                     <CardContent>
-                                        <Typography variant="h5" align="center" sx={{marginBottom: hasError ? 2 : 5,fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green'}}>
-                                            Crie o seu perfil!
-                                        </Typography>
+                                        <TitleCardGeneric title="Crie seu perfil" align="center" />
                                         <Grid container direction={'column'} alignContent='center' justifyContent={'center'}>
                                             { hasError && <Grid item sx={{marginBottom: 4}}>
                                                 <AlertError title={"Atenção"} type={'warning'} style={'filled'} msgError="As senhas informadas não condizem!" />

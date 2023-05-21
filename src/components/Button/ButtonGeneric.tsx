@@ -19,7 +19,8 @@ interface IButtonGeneric {
     color?: any;
     typeIcon?: string,
     fullWidth?: boolean,
-    height?: string
+    height?: string,
+    buttonPesquisar?: boolean,
 }
 
 export const ButtonGeneric = (props: IButtonGeneric) => {
@@ -44,6 +45,8 @@ export const ButtonGeneric = (props: IButtonGeneric) => {
             fontFamily: 'Kanit, sans-serif;',
             width: props.fullWidth ? '100%' : null,
             border: 'none',
+            paddingLeft: props.buttonPesquisar ? 5 : null,
+            paddingRight: props.buttonPesquisar ? 5 : null,
             marginRight: props.marginRight ? props.marginRight : '20px',
             backgroundColor: props.backgroundColor ? props.backgroundColor : '#006666',
             marginTop: props.marginTop && props.marginTop,   

@@ -108,7 +108,7 @@ export const ProdutoForm = (props: any) => {
         <Box sx={{margin: 4, marginTop: 10}}>
             <CardGeneric title="Produtos">
 
-                    <Collapse in={produtos.length !== 0}>
+                    <Collapse in={produtos.length !== 0} unmountOnExit timeout={'auto'}>
                         <Card sx={{ backgroundColor: 'black', width: '300px' }}>
                             <CardContent>
                                 {produtos.map((produto: any, i: any) => {
@@ -142,24 +142,13 @@ export const ProdutoForm = (props: any) => {
                     
 
                     <Collapse in={!cardProdutos}>
-                        <Box sx={{ margin: 2.5 }}>
-                            <Grid container direction={'row'} sx={{}} >
-                                <Grid item xs={12} md={12} lg={4} xl={5}>
-                                </Grid>
-
-                                <Grid item xs={12} md={12} lg={4} xl={2}>
-                                    <ButtonGeneric fullWidth title='Adicionar produtos' typeIcon="pesquisar" onClick={() => { setCardProdutos(true) }} />
-                                </Grid>
-
-                                <Grid item xs={12} md={12} lg={4} xl={5}>
-                                </Grid>
-                            </Grid>
+                        <Box sx={{ marginTop: 5,  marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                            <ButtonGeneric buttonPesquisar title='Adicionar produtos' typeIcon="pesquisar" onClick={() => { setCardProdutos(true) }} />
                         </Box>
-                    </Collapse> 
-                    
+                    </Collapse>
 
                     <Collapse in={cardProdutos}>
-                        <Grid item ref={cardProdutosRef}>
+                        <Grid item ref={cardProdutosRef} >
                             <form>
                                 <Grid container direction={'column'}>
 

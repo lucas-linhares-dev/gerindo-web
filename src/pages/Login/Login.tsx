@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
 import { useState } from "react";
 import { AlertError } from "../../components/helpers/AlertError";
+import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 
 
 interface ILogin {
@@ -59,11 +60,9 @@ export const Login = () => {
 
                             </Grid>
                             <Grid item xs={12} md={6} lg={5} xl={4}>
-                                <Card sx={{ margin: 5, marginTop: 15, backgroundColor: 'rgb(242, 255, 220, 50%)', borderRadius: '10px' }}>
+                                <Card sx={{ margin: 5, marginTop: 15, backgroundColor: 'transparent', borderRadius: '10px' }}>
                                     <CardContent>
-                                        <Typography variant="h5" align="center" sx={{ marginBottom: hasError ? 2 : 5, fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green' }}>
-                                            Login
-                                        </Typography>
+                                        <TitleCardGeneric title="Login" align="center" />
                                         {hasError && <Grid item sx={{ marginBottom: 4 }}>
                                             <AlertError title={"Atenção"} type={'warning'} style={'filled'} msgError={msgError} />
                                         </Grid>}

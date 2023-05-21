@@ -1,6 +1,6 @@
 
 
-import { Box, Card, CardContent, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
@@ -21,6 +21,8 @@ import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ClienteActions } from "../../actions/ClienteActions";
 import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelectorNome } from "../../states/ClienteState";
+import { CardGeneric } from "../../components/Card/CardGeneric";
+import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 
 interface ClienteForm {
     nome: string,
@@ -31,7 +33,7 @@ interface ClienteForm {
 
 export const Cliente = () => {
 
-    const clienteActions = ClienteActions() 
+    const clienteActions = ClienteActions()
 
     const [clienteSelecionado, setClienteSelecionado] = useState<any>(null)
 
@@ -64,26 +66,26 @@ export const Cliente = () => {
 
 
     const onSubmitCliente = async (data: any) => {
-        if(clienteSelecionado === null){
+        if (clienteSelecionado === null) {
             const confirm = await OpenModalConfirm("Cadastrar cliente?")
-            if(confirm){
+            if (confirm) {
                 clienteActions.clienteInsert(data).then((res: any) => {
                     if (res.status === 200) {
                         OpenModal(`Cliente cadastrado com sucesso!`, () => { })
-                        reset({...initialValues})
+                        reset({ ...initialValues })
                     }
                     else {
                         console.log("ERROS BACK END")
-                    } 
+                    }
                 })
             }
         }
         else {
             const confirm = await OpenModalConfirm("Alterar cliente?")
-            if(confirm){
+            if (confirm) {
                 clienteActions.clienteUpdate(data).then((res: any) => {
-                    if(res.status === 200){
-                        OpenModal("Cliente alterado com sucesso!", () => {})
+                    if (res.status === 200) {
+                        OpenModal("Cliente alterado com sucesso!", () => { })
                         setClienteSelecionado(res.data)
                         setReload(true)
                     }
@@ -97,24 +99,24 @@ export const Cliente = () => {
 
     const excluirCliente = async () => {
         const confirm = await OpenModalConfirm("Excluir Cliente?")
-        if(confirm){
-                const res = await clienteActions.clienteExcluir(clienteSelecionado._id)
-                if(res?.status === 200){
-                    OpenModal("Cliente excluido com sucesso!", () => {})
-                    setReload(true)
-                    setClienteSelecionado(null)
-                }
-                else {
-                    console.log("ERROS BACK END")
-                }
+        if (confirm) {
+            const res = await clienteActions.clienteExcluir(clienteSelecionado._id)
+            if (res?.status === 200) {
+                OpenModal("Cliente excluido com sucesso!", () => { })
+                setReload(true)
+                setClienteSelecionado(null)
+            }
+            else {
+                console.log("ERROS BACK END")
+            }
         }
     }
 
     useEffect(() => {
-        if(clienteSelecionado != null){
+        if (clienteSelecionado != null) {
             reset(clienteSelecionado)
         } else {
-            reset({ ...initialValues})
+            reset({ ...initialValues })
         }
     }, [clienteSelecionado])
 
@@ -124,9 +126,14 @@ export const Cliente = () => {
             <form onSubmit={handleSubmit(onSubmitCliente)}>
                 <Grid container direction={'column'}>
 
-                    <Typography variant="h5" align="center" sx={{ marginTop: 2, marginBottom: 2, fontSize: 30, fontWeight: 'bold', borderBottom: 'solid 1px rgb(148, 148, 148)', color: 'green' }}>
-                        Clientes
-                    </Typography>
+                    <TitlePageGeneric title="Clientes" />
+
+
+                    <Collapse in={!cardPesquisar}>
+                        <Box sx={{ marginTop: 5, marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                            <ButtonGeneric buttonPesquisar title='Pesquisar' typeIcon="pesquisar" type="button" onClick={() => { setCardPesquisar(true) }} />
+                        </Box>
+                    </Collapse>
 
                     {/* {hasError &&
                      <Grid item sx={{ marginBottom: 4 }}>
@@ -134,41 +141,26 @@ export const Cliente = () => {
                     </Grid>
                     } */}
 
-                    <Box sx={{ margin: 2.5 }}>
-                        <Grid container direction={'row'} sx={{  }} >
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
+                    <Collapse in={cardPesquisar}>
+                        <Grid item sx={{ marginTop: 2 }}>
+
+                            <Grid container
+                                direction="row" spacing={1.5}>
+                                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
+                                    <TableFornecedores reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} clienteSelecionado={clienteSelecionado} setClienteSelecionado={setClienteSelecionado} atomFilter={clienteSearchAtom} selector={clienteSelectorNome} />
+                                </Grid>
                             </Grid>
 
-                            {!cardPesquisar && <Grid item xs={12} md={12} lg={4} xl={2}>
-                                <ButtonGeneric fullWidth title='pesquisar' typeIcon="pesquisar" backgroundColor={'#dbdbdb'} color={'black'} backgroundColorHover={'#ffffff'} onClick={() => { setCardPesquisar(true) }} />
-                            </Grid>}
-
-                            <Grid item xs={12} md={12} lg={4} xl={5}>
-                            </Grid>
                         </Grid>
-                    </Box>
+                    </Collapse>
 
-                    {cardPesquisar &&
-                    <Grid item>
-
-                        <Grid container
-                            direction="row" spacing={1.5}>
-                            <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                <TableFornecedores reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} clienteSelecionado={clienteSelecionado} setClienteSelecionado={setClienteSelecionado} atomFilter={clienteSearchAtom} selector={clienteSelectorNome} />
-                            </Grid>
-                        </Grid>
-
-                    </Grid>}
 
                     <Grid item>
 
-                        <Card sx={{ margin: 2.5, backgroundColor: '#ebebeb' }}>
-                            <CardContent>
 
-                                <Typography variant="h5" sx={{ marginBottom: 2, fontSize: 22, fontWeight: 'bold', textDecoration: 'underline', color: 'green' }}>
-                                    Informações gerais
-                                </Typography>
 
+                        <Box sx={{ margin: 2, marginTop: 4 }}>
+                            <CardGeneric title="Informações gerais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
                                     <Grid item xs={12} md={12} lg={3} xl={3}>
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
@@ -183,15 +175,16 @@ export const Cliente = () => {
                                         <TxtFieldForm name={"cpf"} control={control} label={"CPF"} error={errors.cpf?.message} />
                                     </Grid>
                                 </Grid>
+                            </CardGeneric>
+                        </Box>
 
-                            </CardContent>
-                        </Card>
+
                         <Grid item>
-                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end'  }}>
-                                    {clienteSelecionado &&
-                                        <ButtonGeneric title='excluir' color={'red'}  typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button"onClick={excluirCliente} />
-                                    }
-                                    <ButtonGeneric title={clienteSelecionado ? 'alterar' :'cadastrar' } />
+                            <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
+                                {clienteSelecionado &&
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirCliente} />
+                                }
+                                <ButtonGeneric title={clienteSelecionado ? 'alterar' : 'cadastrar'} />
                             </Box>
                         </Grid>
                     </Grid>
@@ -276,5 +269,5 @@ const TableFornecedores = (props: ITableFornecedores) => {
     return (
         <TableGeneric atomPage={clientePageState} atomRowPerPage={clienteRowsPerPageState} setCardPesquisa={props.setCardPesquisa} reload={props.reload} setReload={props.setReload} tabela="clientes" title='Pesquisar' setItemEdit={props.setClienteSelecionado} itemEdit={props.clienteSelecionado} atomFilter={props.atomFilter} atomSelectorList={props.selector} columns={columns} widthTxtField={"200px"} enableSearch={true} enablePagination={false} height={400} />
     )
-}   
+}
 
