@@ -36,6 +36,7 @@ export interface EntradaForm {
 
 export const Entrada = () => {
 
+
     // const entradaActions = entradaActions() 
 
     const [entradaSelecionada, setEntradaSelecionado] = useState<any>(null)
@@ -69,7 +70,6 @@ export const Entrada = () => {
         defaultValues: initialValues,
         resolver: yupResolver(validationSchema)
     })
-
 
     const onSubmitEntrada = async (data: any) => {
         console.log(data)

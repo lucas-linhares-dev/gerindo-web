@@ -2,7 +2,7 @@
 import Swal from "sweetalert2"
 import withReactContent from "sweetalert2-react-content"
 
-export function OpenModal(title: string, action: any) {
+export function OpenModal(title: string, action: any, time?: any) {
 
     const MySwal = withReactContent(Swal)
     
@@ -11,7 +11,7 @@ export function OpenModal(title: string, action: any) {
         icon: 'success',
         title: title,
         showConfirmButton: false,
-        timer: 3000
+        timer: time || 2500
     }).then(() => {
         action()
     })

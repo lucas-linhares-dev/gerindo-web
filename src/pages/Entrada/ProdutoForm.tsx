@@ -24,6 +24,7 @@ import { CardGeneric } from "../../components/Card/CardGeneric";
 
 
 interface ProdutoForm {
+    _id: string,
     nome: string,
     preco_venda: string, // fazer mascara
     preco_custo: string,
@@ -68,15 +69,21 @@ export const ProdutoForm = (props: any) => {
     const { getValues, formState: { errors }, control, reset } = useForm<ProdutoForm>({
     })
 
-
     const insertProduto = () => {
-        if (produtoSelecionado !== null) {
-            setProdutos((prev: any) => {
-                return [
-                    ...prev,
-                    getValues()
-                ]
-            })
+        console.log(getValues())
+        console.log(produtos)
+        if (produtoSelecionado !== null ) {
+            if(!produtos.some((produto: any) => produto._id === getValues('_id'))){
+                setProdutos((prev: any) => {
+                    return [
+                        ...prev,
+                        getValues()
+                    ]
+                })
+            }
+            else{
+                OpenModal(`Este produto já foi inserido!`, () => { }, 2000)
+            }
         } else console.log("Nao enviou")
     }
 
@@ -109,27 +116,27 @@ export const ProdutoForm = (props: any) => {
             <CardGeneric title="Produtos">
 
                     <Collapse in={produtos.length !== 0} unmountOnExit timeout={'auto'}>
-                        <Card sx={{ backgroundColor: 'black', width: '300px' }}>
+                        <Card sx={{ backgroundColor: '#006666', width: '300px', margin: 3 }}>
                             <CardContent>
                                 {produtos.map((produto: any, i: any) => {
                                     return (
                                         <>
-                                            <Grid container direction={'row'} sx={{ marginBottom: '5px' }}>
-                                                <Grid item xs={12} md={12} lg={12} xl={1.5} sx={{ marginRight: 1 }}>
+                                            <Grid container direction={'row'} sx={{marginTop: 3, marginBottom: 3, backgroundColor: '#008584', padding: 1, borderRadius: '5px' }}>
+                                                <Grid item xs={12} md={12} lg={1.5} xl={1.5} sx={{ marginRight: 1 }}>
                                                     <Box sx={{ display: 'inline-block' }}>
-                                                        <IconButton onClick={() => removerProduto(i)}><RemoveCircleOutlineIcon sx={{ color: 'red', fontSize: '20px' }} /></IconButton>
+                                                        <IconButton onClick={() => removerProduto(i)}><RemoveCircleOutlineIcon sx={{ color: 'red', fontSize: '18px' }} /></IconButton>
                                                     </Box>
                                                 </Grid>
-                                                <Grid item xs={12} md={12} lg={12} xl={8.5}>
+                                                <Grid item xs={12} md={12} lg={8.5} xl={8.5}>
 
                                                     <Box sx={{ display: 'inline-block', marginTop: '1px' }}>
-                                                        <Typography sx={{ color: 'white' }} variant="h5">{produto.nome}</Typography>
+                                                        <Typography sx={{ color: 'white', fontFamily: 'Kanit, sans-serif;',  }} variant="h5">{produto.nome}</Typography>
                                                     </Box>
                                                 </Grid>
-                                                <Grid item xs={12} md={12} lg={12} xl={1}>
+                                                <Grid item xs={12} md={12} lg={1} xl={1}>
 
                                                     <Box sx={{ display: 'inline-block', marginTop: '2px' }}>
-                                                        <Typography sx={{ color: 'yellow' }} variant="h6">{produto.quantidade}</Typography>
+                                                        <Typography sx={{ color: 'white', fontFamily: 'Kanit, sans-serif;', fontWeight: 'bold' }} variant="h6">{produto.quantidade}</Typography>
                                                     </Box>
                                                 </Grid>
                                             </Grid>
