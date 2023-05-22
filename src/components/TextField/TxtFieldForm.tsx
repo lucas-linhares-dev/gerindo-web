@@ -21,8 +21,8 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
             render={({ field: { onChange, value } }) => (
                 <>
                     <TextField
-                        inputProps={{ style: { textAlign: 'left' } }}
-                        InputLabelProps={{ style: { color: props.error ? "#df2320" : "#008584", fontSize: '1.2rem', fontFamily: 'Kanit, sans-serif;', font: 'Kanit, sans-serif;' } }} 
+                        InputProps={{ style: { textAlign: 'left', fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' } }}
+                        InputLabelProps={{ style: { color: props.error ? "#df2320" : "#008584", fontSize: '1.2rem', fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' } }} 
                         sx={{
                             width: 1,
                             '& .MuiOutlinedInput-root': {

@@ -8,7 +8,7 @@ import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
 import { AlertError } from "../../components/helpers/AlertError";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CategoriaActions } from "../../actions/CategoriaActions";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -24,13 +24,15 @@ import { ProdutoForm } from "./ProdutoForm";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import { CardGeneric } from "../../components/Card/CardGeneric";
+import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
+import { getData } from "../../components/helpers/getDataHora";
 
 export interface EntradaForm {
     codigo: string,
-    nome: string,
-    descricao: string,
-    data: Date,
+    data: any,
     fornecedor: number,
+    vlr_total: string,
+    descricao: string,
     produtos: any
 }
 
@@ -38,6 +40,10 @@ export const Entrada = () => {
 
 
     // const entradaActions = entradaActions() 
+
+    const [produtos, setProdutos] = useState<any>([])
+
+    const dataAtual = getData()
 
     const [entradaSelecionada, setEntradaSelecionado] = useState<any>(null)
 
@@ -49,21 +55,22 @@ export const Entrada = () => {
     const [cardPesquisar, setCardPesquisar] = useState<boolean>(false)
 
 
-    const initialValues = {
-        codigo: '',
-        nome: '',
-        descricao: '',
-        data: undefined,
-        fornecedor: undefined,
-        produtos: undefined
-    }
+    const initialValues = useMemo(() => {
+        return {
+            codigo: '',
+            descricao: '',
+            data: dataAtual,
+            vlr_total: '',
+            fornecedor: undefined,
+            produtos: undefined
+        }
+    }, [dataAtual])
 
     const validationSchema = yup.object().shape({
-        nome: yup.string()
-            .required("Campo obrigatório")
-            .min(3, 'Mínimo 3 letras'),
-        email: yup.string()
-            .email('E-mail inválido'),
+        data: yup.string()
+            .required('Campo obrigatório'),
+        vlr_total: yup.string()
+            .required("Campo obrigatório") 
     })
 
     const { setValue, handleSubmit, formState: { errors }, control, reset } = useForm<EntradaForm>({
@@ -73,6 +80,7 @@ export const Entrada = () => {
 
     const onSubmitEntrada = async (data: any) => {
         console.log(data)
+        console.log(produtos)
         //     const confirm = await OpenModalConfirm("Cadastrar entrada?")
         //     if(confirm){
         //         entradaActions.entradaInsert(data).then((res: any) => {
@@ -143,18 +151,21 @@ export const Entrada = () => {
                         <Box sx={{margin: 2, marginTop: 4}}>
                             <CardGeneric title="Dados da entrada">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item  >
-                                        <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
+                                    <Grid item  xs={12} md={12} lg={4} xl={4} >
+                                        <TxtFieldForm name={"codigo"} control={control} label={"Codigo"} error={errors.codigo?.message} />
                                     </Grid>
-                                    {/* <Grid item xs={12} md={12} lg={6.5} xl={6.5}>
-                                        <TxtFieldForm name={"email"} control={control} label={"E-mail"} error={errors.email?.message} />
+                                    <Grid item xs={12} md={12} lg={2} xl={2} >
+                                        <TxtFieldForm name={"data"} control={control} label={"Data"} error={errors.data?.message} type={'date'} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={1.5} xl={1.5}>
-                                        <TxtFieldForm name={"telefone"} control={control} label={"Telefone"} error={errors.telefone?.message} />
+                                    <Grid item xs={12} md={12} lg={4} xl={4} >
+                                        <GetAutoCompleteForm label={"Fornecedor"} name={"fornecedor"} control={control} selector={fornecedorSelector} optionLabel={"nome"} />                                    
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={1} xl={1}>
-                                        <TxtFieldForm name={"cpf"} control={control} label={"CPF"} error={errors.cpf?.message} />
-                                    </Grid> */}
+                                    <Grid item xs={12} md={12} lg={2} xl={2} >
+                                        <TxtFieldForm name={"vlr_total"} control={control} label={"Vlr. total"} error={errors.vlr_total?.message} />
+                                    </Grid>
+                                    <Grid item xs={12} md={12} lg={12} xl={12} >
+                                        <TxtFieldForm name={"descricao"} control={control} label={"Descricao"} error={errors.descricao?.message} />
+                                    </Grid>
                                 </Grid>
                             </CardGeneric>
                         </Box>
@@ -164,11 +175,10 @@ export const Entrada = () => {
                                 <ButtonGeneric title={'cadastrar'} />
                             </Box>
                         </Grid>
-
-                        <ProdutoForm />
                     </Grid>
                 </Grid>
             </form>
+            <ProdutoForm setProdutos={setProdutos} />
         </div >
     )
 }

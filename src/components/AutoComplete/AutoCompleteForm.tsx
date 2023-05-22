@@ -30,14 +30,14 @@ export const AutoCompleteForm = (props: IAutoCompleteForm) => {
 
         if (dataSet.hasOwnProperty('group')) {
             return (
-                <ListSubheader key={dataSet.key} component="div" style={inlineStyle}>
+                <ListSubheader key={dataSet.key} component="div" style={inlineStyle} sx={{fontFamily: "Kanit, sans-serif", fontWeight: 'bold'}}>
                     {dataSet.group}
                 </ListSubheader>
             );
         }
 
         return (
-            <Typography component="li" {...dataSet[0]} noWrap style={inlineStyle}>
+            <Typography component="li" {...dataSet[0]} noWrap style={inlineStyle} sx={{fontFamily: "Kanit, sans-serif", fontWeight: 'bold'}}>
                 {dataSet[0].key}
                 {`#${dataSet[2] + 1} - ${dataSet[1]}`}
             </Typography>
@@ -182,39 +182,36 @@ export const AutoCompleteForm = (props: IAutoCompleteForm) => {
                             <TextField
                                 {...params}
                                 label={props.label}
-                                InputLabelProps={{ style: { color: props.error ? "#e4605e" : "#094b00d1", fontSize: '1.2rem', fontFamily: 'Kanit, sans-serif;'} }} 
-                                sx={{
-
-                                    "& .MuiInputBase-input.Mui-disabled": {
-                                        WebkitTextFillColor: "#5a5a5a",
-                                    },
-                                    width: 1,
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: props.error ? "#e4605e" : "#2B7C41",
-                                            borderWidth: 1,
-                                            fontSize: '1.16rem',
-
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: props.error ? "#e4605e" : "#2B7C41",
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: props.error ? "#e4605e" : "#2B7C41",
-                                        },
-                                    },
-                                    '& input[type=number]': {
-                                        'MozAppearance': 'textfield'
-                                    },
-                                    '& input[type=number]::-webkit-outer-spin-button': {
-                                        'WebkitAppearance': 'none',
-                                        margin: 0
-                                    },
-                                    '& input[type=number]::-webkit-inner-spin-button': {
-                                        'WebkitAppearance': 'none',
-                                        margin: 0
-                                    }
-                                }} />
+                                InputProps={{ ...params.InputProps, style: { textAlign: 'left', fontFamily: "Kanit, sans-serif", fontWeight: 'bold' } }}
+                        InputLabelProps={{ style: { color: props.error ? "#df2320" : "#008584", fontSize: '1.2rem', fontFamily: "Kanit, sans-serif", fontWeight: 'bold' } }} 
+                        sx={{
+                            width: 1,
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: props.error ? "#e20400" : "#008584",
+                                    borderWidth:  1,
+                                    fontSize: '1.16rem',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: props.error ? "#e20400" : "#008584",
+                                    
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: props.error ? "#e20400" : "#008584",
+                                },
+                            },
+                            '& input[type=number]': {
+                                'MozAppearance': 'textfield'
+                            },
+                            '& input[type=number]::-webkit-outer-spin-button': {
+                                'WebkitAppearance': 'none',
+                                margin: 0
+                            },
+                            '& input[type=number]::-webkit-inner-spin-button': {
+                                'WebkitAppearance': 'none',
+                                margin: 0
+                            }
+                        }} />
                         }
                         renderOption={(props, option: any, state) =>
                             [props, option?.nome, state.index] as React.ReactNode

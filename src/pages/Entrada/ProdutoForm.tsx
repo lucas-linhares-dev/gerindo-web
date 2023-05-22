@@ -31,16 +31,18 @@ interface ProdutoForm {
     codigo: string
     estoque: number,
     categoria: number, // recoil
-    quantidade: number
+    quantidade: number,
 }
 
-// interface ProdutoFormProps {
+interface ProdutoFormProps {
+    setProdutos: any
+}
 
-// }
-
-export const ProdutoForm = (props: any) => {
+export const ProdutoForm = (props: ProdutoFormProps) => {
 
     const produtoActions = ProdutoActions()
+
+    const [produtosSalvos, setProdutosSalvos] = useState<any>(false)
 
     const cardProdutosRef = useRef<any>(null);
 
@@ -51,6 +53,7 @@ export const ProdutoForm = (props: any) => {
     const [cardProdutos, setCardProdutos] = useState<boolean>(false)
     const [produtos, setProdutos] = useState<any>([])
     const [remove, setRemove] = useState<any>(false)
+
 
     const [produtoSelecionado, setProdutoSelecionado] = useState<any>(null)
 
@@ -87,6 +90,14 @@ export const ProdutoForm = (props: any) => {
         } else console.log("Nao enviou")
     }
 
+
+    function salvarProdutosNaEntrada() {
+        const produtosSave = produtos.map((produto: any) => {return {cod_ref: produto._id, quantidade: produto.quantidade}})
+        console.log(produtosSave)
+        props.setProdutos(produtos)
+        console.log("SALVOU")
+    }
+
     useEffect(() => {
         if (produtoSelecionado != null) {
             reset(produtoSelecionado)
@@ -116,12 +127,15 @@ export const ProdutoForm = (props: any) => {
             <CardGeneric title="Produtos">
 
                     <Collapse in={produtos.length !== 0} unmountOnExit timeout={'auto'}>
-                        <Card sx={{ backgroundColor: '#006666', width: '300px', margin: 3 }}>
+                        <Box>
+
+                        
+                        <Card sx={{ backgroundColor: 'transparent' }}>
                             <CardContent>
                                 {produtos.map((produto: any, i: any) => {
                                     return (
                                         <>
-                                            <Grid container direction={'row'} sx={{marginTop: 3, marginBottom: 3, backgroundColor: '#008584', padding: 1, borderRadius: '5px' }}>
+                                            <Grid container direction={'row'} sx={{marginTop: 1, marginBottom: 1, backgroundColor: '#008584', padding: 1, borderRadius: '5px' }}>
                                                 <Grid item xs={12} md={12} lg={1.5} xl={1.5} sx={{ marginRight: 1 }}>
                                                     <Box sx={{ display: 'inline-block' }}>
                                                         <IconButton onClick={() => removerProduto(i)}><RemoveCircleOutlineIcon sx={{ color: 'red', fontSize: '18px' }} /></IconButton>
@@ -135,7 +149,7 @@ export const ProdutoForm = (props: any) => {
                                                 </Grid>
                                                 <Grid item xs={12} md={12} lg={1} xl={1}>
 
-                                                    <Box sx={{ display: 'inline-block', marginTop: '2px' }}>
+                                                    <Box sx={{ display: 'inline-block', marginTop: '1px' }}>
                                                         <Typography sx={{ color: 'white', fontFamily: 'Kanit, sans-serif;', fontWeight: 'bold' }} variant="h6">{produto.quantidade}</Typography>
                                                     </Box>
                                                 </Grid>
@@ -143,8 +157,13 @@ export const ProdutoForm = (props: any) => {
                                         </>
                                     )
                                 })}
+
+                                <Box sx={{textAlign: 'center', marginTop: 5}}>
+                                    <ButtonGeneric title={'SALVAR PRODUTOS'} type="button" height="55px" onClick={salvarProdutosNaEntrada}  />
+                                </Box>
                             </CardContent>
                         </Card>
+                        </Box>
                     </Collapse>
                     
 
