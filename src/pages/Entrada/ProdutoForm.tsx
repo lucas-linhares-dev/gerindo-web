@@ -35,14 +35,15 @@ interface ProdutoForm {
 }
 
 interface ProdutoFormProps {
-    setProdutos: any
+    setProdutos: any,
+    flagProdutosSalvos: any,
+    setFlagProdutosSalvos: any
 }
 
 export const ProdutoForm = (props: ProdutoFormProps) => {
 
     const produtoActions = ProdutoActions()
 
-    const [produtosSalvos, setProdutosSalvos] = useState<any>(false)
 
     const cardProdutosRef = useRef<any>(null);
 
@@ -73,8 +74,6 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
     })
 
     const insertProduto = () => {
-        console.log(getValues())
-        console.log(produtos)
         if (produtoSelecionado !== null ) {
             if(!produtos.some((produto: any) => produto._id === getValues('_id'))){
                 setProdutos((prev: any) => {
@@ -93,9 +92,8 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
 
     function salvarProdutosNaEntrada() {
         const produtosSave = produtos.map((produto: any) => {return {cod_ref: produto._id, quantidade: produto.quantidade}})
-        console.log(produtosSave)
-        props.setProdutos(produtos)
-        console.log("SALVOU")
+        props.setProdutos(produtosSave)
+        props.setFlagProdutosSalvos(true)
     }
 
     useEffect(() => {
@@ -113,6 +111,7 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
     const removerProduto = (i: any) => {
         newProdutos.splice(i, 1)
         setRemove((prev: any) => !prev)
+        props.setFlagProdutosSalvos(false)
     }
 
     useEffect(() => {
@@ -122,8 +121,13 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
     }, [newProdutos, remove])
 
 
+    useEffect(() => {
+        props.setFlagProdutosSalvos(false)
+    }, [produtos])
+
+
     return (
-        <Box sx={{margin: 4, marginTop: 10}}>
+        <Box sx={{margin: 4, marginTop: 5}}>
             <CardGeneric title="Produtos">
 
                     <Collapse in={produtos.length !== 0} unmountOnExit timeout={'auto'}>
@@ -159,7 +163,7 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
                                 })}
 
                                 <Box sx={{textAlign: 'center', marginTop: 5}}>
-                                    <ButtonGeneric title={'SALVAR PRODUTOS'} type="button" height="55px" onClick={salvarProdutosNaEntrada}  />
+                                    <ButtonGeneric disabledConfirm={props.flagProdutosSalvos} title={props.flagProdutosSalvos ? 'SALVO' :'SALVAR PRODUTOS'} type="button" backgroundColor={ props.flagProdutosSalvos ? "#008584" : null} typeIcon={props.flagProdutosSalvos ? "confirmed" : "gravar"} height="55px" onClick={salvarProdutosNaEntrada}  />
                                 </Box>
                             </CardContent>
                         </Card>

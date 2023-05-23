@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import SearchIcon from '@mui/icons-material/Search';
+import CheckIcon from '@mui/icons-material/Check';
 
 interface IButtonGeneric {
     title: string
@@ -21,9 +22,12 @@ interface IButtonGeneric {
     fullWidth?: boolean,
     height?: string,
     buttonPesquisar?: boolean,
+    disabledPadrao?: boolean,
+    disabledConfirm?: boolean,
 }
 
 export const ButtonGeneric = (props: IButtonGeneric) => {
+
 
     const typeIcon = props.typeIcon
 
@@ -36,12 +40,18 @@ export const ButtonGeneric = (props: IButtonGeneric) => {
             case "excluir": return <DeleteIcon />
             case "entrar": return <ExitToAppIcon />
             case "pesquisar": return <SearchIcon />
+            case "confirmed": return <CheckIcon/>
         }
     }
     
     return (
         <Button 
+        disabled = {props.disabledPadrao || props.disabledConfirm || false }
          sx={{
+            "&.Mui-disabled": {
+                backgroundColor: props.disabledConfirm ? '#00b3b3' : '#c5c5c5',
+                color: "#f5f5f5"
+            },
             fontFamily: 'Kanit, sans-serif;',
             width: props.fullWidth ? '100%' : null,
             border: 'none',

@@ -26,6 +26,7 @@ import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric"
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
 import { getData } from "../../components/helpers/getDataHora";
+import { EntradaActions } from "../../actions/EntradaActions";
 
 export interface EntradaForm {
     codigo: string,
@@ -39,11 +40,13 @@ export interface EntradaForm {
 export const Entrada = () => {
 
 
-    // const entradaActions = entradaActions() 
+    const entradaActions = EntradaActions() 
 
     const [produtos, setProdutos] = useState<any>([])
 
     const dataAtual = getData()
+
+    const [flagprodutosSalvos, setFlagProdutosSalvos] = useState<any>(false)
 
     const [entradaSelecionada, setEntradaSelecionado] = useState<any>(null)
 
@@ -79,20 +82,19 @@ export const Entrada = () => {
     })
 
     const onSubmitEntrada = async (data: any) => {
-        console.log(data)
-        console.log(produtos)
-        //     const confirm = await OpenModalConfirm("Cadastrar entrada?")
-        //     if(confirm){
-        //         entradaActions.entradaInsert(data).then((res: any) => {
-        //             if (res.status === 200) {
-        //                 OpenModal(`Entrada cadastrada com sucesso!`, () => { })
-        //                 reset({...initialValues})
-        //             }
-        //             else {
-        //                 console.log("ERROS BACK END")
-        //             } 
-        //         })
-        //     }
+        const confirm = await OpenModalConfirm("Cadastrar entrada?")
+        if(confirm){
+            data.produtos = produtos
+            entradaActions.entradaInsert(data).then((res: any) => {
+                if (res.status === 200) {
+                    OpenModal(`Entrada cadastrada com sucesso!`, () => { })
+                    reset({...initialValues})
+                }
+                else {
+                    console.log("ERROS BACK END")
+                }
+            })
+        }
     }
 
 
@@ -172,13 +174,13 @@ export const Entrada = () => {
 
                         <Grid item>
                             <Box sx={{margin: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                                <ButtonGeneric title={'cadastrar'} />
+                                <ButtonGeneric title={'cadastrar'} disabledPadrao={!flagprodutosSalvos}/>
                             </Box>
                         </Grid>
                     </Grid>
                 </Grid>
             </form>
-            <ProdutoForm setProdutos={setProdutos} />
+            <ProdutoForm setProdutos={setProdutos} flagProdutosSalvos={flagprodutosSalvos} setFlagProdutosSalvos={setFlagProdutosSalvos}/>
         </div >
     )
 }
