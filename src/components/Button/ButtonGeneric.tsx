@@ -24,6 +24,8 @@ interface IButtonGeneric {
     buttonPesquisar?: boolean,
     disabledPadrao?: boolean,
     disabledConfirm?: boolean,
+    form?: any,
+
 }
 
 export const ButtonGeneric = (props: IButtonGeneric) => {
@@ -46,6 +48,7 @@ export const ButtonGeneric = (props: IButtonGeneric) => {
     
     return (
         <Button 
+        form={props.form}
         disabled = {props.disabledPadrao || props.disabledConfirm || false }
          sx={{
             "&.Mui-disabled": {
