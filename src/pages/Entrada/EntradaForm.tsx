@@ -28,6 +28,7 @@ import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoComple
 import { getData } from "../../components/helpers/getDataHora";
 import { EntradaActions } from "../../actions/EntradaActions";
 import { entradaPageState, entradaRowsPerPageState, entradaSearchAtom, entradaSelectorCodigo } from "../../states/EntradaState";
+import { decimalDigitsMask } from "../../components/helpers/masks";
 
 export interface EntradaForm {
     codigo: string,
@@ -140,7 +141,7 @@ export const Entrada = () => {
             let vlrTotalProduto = preco_custo_format * produto.quantidade
             vlrTotalEntrada += vlrTotalProduto
         });
-        setValue('vlr_total', `${vlrTotalEntrada.toString()},00`)
+        setValue('vlr_total', decimalDigitsMask((vlrTotalEntrada*100).toString(), 2))
     }, [produtos, setValue])
 
 
@@ -192,7 +193,7 @@ export const Entrada = () => {
                                         <GetAutoCompleteForm label={"Fornecedor"} name={"fornecedor"} control={control} selector={fornecedorSelector} optionLabel={"nome"} />
                                     </Grid>
                                     <Grid item xs={12} md={2} lg={2} xl={2} >
-                                        <TxtFieldForm name={"vlr_total"} control={control} label={"Vlr. total"} error={errors.vlr_total?.message} readOnly={entradaSelecionada} />
+                                        <TxtFieldForm name={"vlr_total"} control={control} label={"Vlr. total"} type="decimal" error={errors.vlr_total?.message} readOnly={entradaSelecionada} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={12} xl={12} >
                                         <TxtFieldForm name={"descricao"} control={control} label={"Descricao"} error={errors.descricao?.message} />

@@ -32,6 +32,7 @@ import { formaPagamentoSelector } from "../../states/FormaPagamentoState";
 import { ProdutoForm } from "../Entrada/ProdutoForm";
 import { vendaSearchAtom, vendaSelectorCodigo } from "../../states/VendaState";
 import { VendaActions } from "../../actions/VendaActions";
+import { decimalDigitsMask } from "../../components/helpers/masks";
 
 
 export interface IVenda {
@@ -146,7 +147,8 @@ export const Venda = () => {
             let vlrTotalProduto = preco_venda_format * produto.quantidade
             vlrTotalVenda+=vlrTotalProduto
         });
-        setValue('vlr_total', `${vlrTotalVenda.toString()},00`)
+        console.log(vlrTotalVenda)
+        setValue('vlr_total', decimalDigitsMask((vlrTotalVenda*100).toString(), 2))
     }, [produtos, setValue])
 
 
@@ -201,7 +203,7 @@ export const Venda = () => {
                                         <GetAutoCompleteForm label={"Forma pag."} name={"forma_pag"} control={control} selector={formaPagamentoSelector} optionLabel={"nome"} />                                    
                                     </Grid>
                                     <Grid item xs={12} md={2} lg={2} xl={2} >
-                                        <TxtFieldForm name={"vlr_total"} control={control} label={"Vlr. total"} error={errors.vlr_total?.message} readOnly={vendaSelecionada} />
+                                        <TxtFieldForm name={"vlr_total"} control={control} label={"Vlr. total"} type="decimal" error={errors.vlr_total?.message} readOnly={vendaSelecionada} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={12} xl={12} >
                                         <TxtFieldForm name={"descricao"} control={control} label={"Descricao"} error={errors.descricao?.message} />

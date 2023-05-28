@@ -147,10 +147,10 @@ export const FormaPagamento = () => {
                         <Box sx={{ margin: 2, marginTop: 4 }}>
                             <CardGeneric title="Informações gerais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item xs={12} md={12} lg={5} xl={5}>
+                                    <Grid item xs={12} md={5} lg={5} xl={5}>
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={7} xl={7}>
+                                    <Grid item xs={12} md={7} lg={7} xl={7}>
                                         <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message} />
                                     </Grid>
                                 </Grid>

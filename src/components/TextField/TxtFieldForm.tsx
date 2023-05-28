@@ -1,6 +1,6 @@
 import { TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
-// import { decimalDigitsMask } from "../../helpers/masks";
+import { decimalDigitsMask, formatCNPJMask, formatCPFMask, formatPhone } from "../helpers/masks";
 
 interface ITxtFieldForm {
     name: string,
@@ -11,6 +11,8 @@ interface ITxtFieldForm {
     onBlur?: any,
     type?: string,
     borderWidth?: number
+    mask?: string,
+    textAlign?: any
 }
 
 export const TxtFieldForm = ( props : ITxtFieldForm) => {
@@ -21,7 +23,8 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
             render={({ field: { onChange, value } }) => (
                 <>
                     <TextField
-                        InputProps={{ style: { textAlign: 'left', fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' } }}
+                        inputProps={{style: { textAlign: props.textAlign || "left"}}}
+                        InputProps={{ style: { fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' } }}
                         InputLabelProps={{ style: { color: props.error ? "#df2320" : "#008584", fontSize: '1.2rem', fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' } }} 
                         sx={{
                             width: 1,
@@ -56,14 +59,21 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
                         label={props.label}
                         onChange={(e) => {
                             let value = e.target.value
+                        
 
-                            // if(props.type === 'decimal'){
-                            //     if(props.casasDecimais === undefined || props.casasDecimais === null){
-                            //         value = decimalDigitsMask(value, 2)
-                            //     }else{
-                            //         value = decimalDigitsMask(value, props.casasDecimais)
-                            //     }
-                            // }
+                            if(props.type === 'decimal'){
+                                value = decimalDigitsMask(value, 2)
+                            }
+                            if(props.mask === 'cpf'){
+                                value = formatCPFMask(value)
+                                // console.log(value)
+                            }
+                            if(props.mask === 'cnpj'){
+                                value = formatCNPJMask(value)
+                            }
+                            if(props.mask === 'telefone'){
+                                value = formatPhone(value)
+                            }
 
                             onChange(value)
                         }}

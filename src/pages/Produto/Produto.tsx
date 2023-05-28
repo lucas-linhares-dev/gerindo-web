@@ -47,8 +47,8 @@ export const Produto = () => {
         return {
             nome: '',
             descricao: '',
-            preco_venda: '', // fazer mascara
-            preco_custo: '',
+            preco_venda: '0,00', // fazer mascara
+            preco_custo: '0,00',
             codigo: '',
             estoque: 0,
             categoria: undefined,
@@ -166,29 +166,29 @@ export const Produto = () => {
                         <Box sx={{margin: 2, marginTop: 4}}>
                             <CardGeneric title={"Informações gerais"}>
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item xs={12} md={12} lg={3} xl={3}>
+                                    <Grid item xs={12} md={5} lg={3} xl={3}>
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={6} xl={6}>
+                                    <Grid item xs={12} md={7} lg={6} xl={6}>
                                         <TxtFieldForm name={"descricao"} control={control} label={"Descrição"} error={errors.descricao?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={1.5} xl={1.5}>
-                                        <TxtFieldForm name={"preco_venda"} control={control} label={"Preço de venda"} error={errors.preco_venda?.message} />
+                                    <Grid item xs={12} md={2} lg={1.5} xl={1.5}>
+                                        <TxtFieldForm name={"preco_venda"} control={control} label={"Preço de venda"} type="decimal" error={errors.preco_venda?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={1.5} xl={1.5}>
-                                        <TxtFieldForm name={"preco_custo"} control={control} label={"Preço de custo"} error={errors.preco_custo?.message} />
+                                    <Grid item xs={12} md={2} lg={1.5} xl={1.5}>
+                                        <TxtFieldForm name={"preco_custo"} control={control} label={"Preço de custo"} type="decimal" error={errors.preco_custo?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={3} xl={3}>
+                                    <Grid item xs={12} md={8} lg={3} xl={3}>
                                         <TxtFieldForm name={"codigo"} control={control} label={"Codigo de barras"} error={errors.codigo?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={4} xl={4}>
+                                    <Grid item xs={12} md={5} lg={4} xl={4}>
                                         <GetAutoCompleteForm label={"Categoria"} name={"categoria"} control={control} selector={categoriaSelector} optionLabel={"nome"} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={4} xl={4}>
+                                    <Grid item xs={12} md={5} lg={4} xl={4}>
                                         <GetAutoCompleteForm label={"Fornecedor"} name={"fornecedor"} control={control} selector={fornecedorSelector} optionLabel={"nome"} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={1} xl={1}>
-                                        <TxtFieldForm name={"estoque"} control={control} label={"Estoque Inic."} error={errors.estoque?.message} />
+                                    <Grid item xs={12} md={2} lg={1} xl={1}>
+                                        <TxtFieldForm name={"estoque"} control={control} label={"Estoque"} type="number" error={errors.estoque?.message} />
                                     </Grid>
                                 </Grid>
                             </CardGeneric>

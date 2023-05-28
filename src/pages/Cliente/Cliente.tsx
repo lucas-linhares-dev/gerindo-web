@@ -161,17 +161,17 @@ export const Cliente = () => {
                         <Box sx={{ margin: 2, marginTop: 4 }}>
                             <CardGeneric title="Informações gerais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item xs={12} md={12} lg={3} xl={3}>
+                                    <Grid item xs={12} md={6} lg={5} xl={5}>
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={6.5} xl={6.5}>
+                                    <Grid item xs={12} md={6} lg={3} xl={4}>
                                         <TxtFieldForm name={"email"} control={control} label={"E-mail"} error={errors.email?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={1.5} xl={1.5}>
-                                        <TxtFieldForm name={"telefone"} control={control} label={"Telefone"} error={errors.telefone?.message} />
+                                    <Grid item xs={12} md={6} lg={2} xl={1.5}>
+                                        <TxtFieldForm name={"telefone"} control={control} label={"Telefone"} mask="telefone" error={errors.telefone?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} lg={1} xl={1}>
-                                        <TxtFieldForm name={"cpf"} control={control} label={"CPF"} error={errors.cpf?.message} />
+                                    <Grid item xs={12} md={6} lg={2} xl={1.5}>
+                                        <TxtFieldForm name={"cpf"} control={control} label={"CPF"} mask="cpf" textAlign={'right'} error={errors.cpf?.message} />
                                     </Grid>
                                 </Grid>
                             </CardGeneric>
