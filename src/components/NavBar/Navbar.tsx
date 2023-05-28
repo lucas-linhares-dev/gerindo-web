@@ -30,8 +30,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PaidIcon from '@mui/icons-material/Paid';
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 
 function Navbar() {
+
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '')
 
     const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -42,7 +49,7 @@ function Navbar() {
     const [openAninhadaParametros, setOpenAninhadaParametros] = useState(false);
     // const [openAninhadaUsuario, setOpenAninhadaUsuario] = useState(false);
     const [openAninhadaEstoque, setOpenAninhadaEstoque] = useState(false)
-    const [openAninhadaClientes, setOpenAninhadaClientes] = useState(false);
+    const [openAninhadaProdutos, setOpenAninhadaProdutos] = useState(false);
     const [openAninhadaVendas, setOpenAninhadaVendas] = useState(false);
 
 
@@ -88,8 +95,8 @@ function Navbar() {
         setOpenAninhadaVendas(!openAninhadaVendas)
     }
 
-    const handleClickClientes = () => {
-        setOpenAninhadaClientes(!openAninhadaClientes)
+    const handleClickProdutos= () => {
+        setOpenAninhadaProdutos(!openAninhadaProdutos)
     }
 
     // const handleBtnDeslogarClick = () => {
@@ -111,8 +118,9 @@ function Navbar() {
     const listItemVendas = () => {
 
         return (
-            <ItemList name='Vendas' onClick={handleClickVendas} stateAninhada={openAninhadaVendas} icon={<ShoppingCartOutlinedIcon className='icon_itemlist' sx={itemListIconStyle} />}  >
-                <NavLinkItem to='/venda' name='Formulário' icon={<ShoppingCartOutlinedIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
+            <ItemList name='Vendas' onClick={handleClickVendas} stateAninhada={openAninhadaVendas} icon={<PointOfSaleIcon className='icon_itemlist' sx={itemListIconStyle} />}  >
+                <NavLinkItem to='/venda' name='Formulário' icon={<ContentPasteSearchIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
+                <NavLinkItem name='Clientes' to='/cliente' icon={<ContactsIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
             </ItemList>
         )
     }
@@ -123,10 +131,8 @@ function Navbar() {
         return (
 
             <ItemList name='Estoque' onClick={handleClickEstoque} stateAninhada={openAninhadaEstoque} icon={<StorageIcon className='icon_itemlist' sx={itemListIconStyle} />}>
-                <NavLinkItem to='/produto' name='Produtos' icon={<ShoppingCartOutlinedIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
                 <NavLinkItem to='/entrada' name='Entradas' icon={<ShoppingCartOutlinedIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
-                <NavLinkItem to='/fornecedor' name='Fornecedores' icon={<ShoppingCartOutlinedIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
-
+                <NavLinkItem to='/fornecedor' name='Fornecedores' icon={<GroupsIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
             </ItemList>
 
         )
@@ -135,18 +141,18 @@ function Navbar() {
     const listItemParametros = () => {
 
         return (
-            <ItemList name='Parâmetros' onClick={handleClickParametros} stateAninhada={openAninhadaParametros} icon={<LocalAtmIcon className='icon_itemlist' sx={itemListIconStyle} />} >
-                <NavLinkItem name='Formas de pagamento' to='/formaPagamento' icon={<ListAltIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
-                <NavLinkItem name='Categorias' to='/categoria' icon={<AccountBalanceIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
+            <ItemList name='Parâmetros' onClick={handleClickParametros} stateAninhada={openAninhadaParametros} icon={<SettingsIcon className='icon_itemlist' sx={itemListIconStyle} />} >
+                <NavLinkItem name='Formas de pagamento' to='/formaPagamento' icon={<PaidIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
+                <NavLinkItem name='Categorias' to='/categoria' icon={<ListAltIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
             </ItemList>
         )
     }
 
-    const listItemClientes = () => {
+    const listItemProdutos = () => {
 
         return (
-            <ItemList name='Clientes' onClick={handleClickClientes} stateAninhada={openAninhadaClientes} icon={<GroupsIcon className='icon_itemlist' sx={itemListIconStyle} />} >
-                <NavLinkItem name='Formulário' to='/cliente' icon={<ListAltIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
+            <ItemList name='Produtos' onClick={handleClickProdutos} stateAninhada={openAninhadaProdutos} icon={<InventoryIcon className='icon_itemlist' sx={itemListIconStyle} />} >
+                <NavLinkItem to='/produto' name='Formulário' icon={<ContentPasteSearchIcon className='icon_navlink' sx={navLinkItemIconStyle} />} />
             </ItemList>
         )
     }
@@ -158,8 +164,18 @@ function Navbar() {
                 <List>
                     {listItemVendas()}
                     {listItemEstoque()}
+                </List>
+            </Box>
+        );
+    }
+
+    const ListMenuDependencias = () => {
+
+        return (
+            <Box>
+                <List>
                     {listItemParametros()}
-                    {listItemClientes()}
+                    {listItemProdutos()}
                 </List>
             </Box>
         );
@@ -178,12 +194,12 @@ function Navbar() {
                             fontFamily: 'Kanit, sans-serif;',
                             fontWeight: 'bold',
                         }} color={'#FFD525'}>
-                            {/* {usuario.nome} */} Lucas
+                            {usuario?.nome} 
                         </Typography>
                         <Typography sx={{
                             fontFamily: 'Kanit, sans-serif;', fontSize: '13px', marginTop: '1px'
                         }} color={'white'}>
-                            Desenvolvedor
+                            {usuario?.cargo}
                         </Typography>
                     </Box>
                 </Grid>
@@ -203,7 +219,7 @@ function Navbar() {
                             </IconButton>
                         </Box>
                         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                            {/* {usuario?.apelido} */} Lucas
+                            {usuario?.nome} 
                         </Typography>
                         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}></Typography>
                         <Tooltip title="Account settings"><IconButton sx={{outline: 'none !important;;'}} edge="end" color="inherit" aria-label="menu" onClick={handleClick}>
@@ -333,6 +349,13 @@ function Navbar() {
                             }} color={'white'}>Módulos</Typography>
                         </Box>
                         {ListMenuModulos()}
+                        <Box sx={{ paddingLeft: 2, paddingTop: 2, borderTop: '1px solid white' }}>
+                            <Typography sx={{
+                                fontFamily: 'Kanit, sans-serif;',
+                                fontWeight: 'bold'
+                            }} color={'white'}>Dependencias</Typography>
+                        </Box>
+                        {ListMenuDependencias()}
                     </Scrollbars>
                     <Box sx={{backgroundColor: '#00b6b6', height: '55px', paddingTop: '5px'}}>
                         <Grid container direction={'row'}>
@@ -349,7 +372,7 @@ function Navbar() {
                                 </IconButton>
                             </Grid>
                             <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
-                                <IconButton  sx={{}} onClick={() => {}}>
+                                <IconButton  sx={{}} onClick={() => {window.location.href = 'http://localhost:3000/configurar_usuario'}}>
                                     <AccountCircleIcon sx={{color: '#006666'}} />
                                 </IconButton>
                             </Grid>

@@ -11,6 +11,7 @@ import { FormaPagamento } from "../pages/FormaPagamento/FormaPagamento"
 import { Entrada } from "../pages/Entrada/EntradaForm"
 import { Venda } from "../pages/Venda/Venda"
 import Navbar from "../components/NavBar/Navbar"
+import { ConfigurarUsuario } from "../pages/Usuario/ConfigurarUsuario"
 
 export const AppRoutes = () => {
 
@@ -22,6 +23,7 @@ export const AppRoutes = () => {
             { usuario && <Navbar />}
             <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/configurar_usuario" element={<ConfigurarUsuario />} />
                 <Route path="/pagina_inicial" element={<PaginaInicial />} />
                 <Route path="/cadastro" element={<Cadastro />} />
                 <Route path="/categoria" element={<Categoria />} />
