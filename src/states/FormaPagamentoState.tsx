@@ -47,7 +47,7 @@ export const formaPagamentoSelector = selector({
 });
 
 async function getFormasPagamento() {
-    const res = await axios.get(`http://localhost:3001/fornecedores/`);
+    const res = await axios.get(`http://localhost:3001/formaspag/`);
     return res
 };
 

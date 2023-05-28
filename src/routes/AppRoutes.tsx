@@ -9,6 +9,7 @@ import { Fornecedor } from "../pages/Fornecedor/Fornecedor"
 import { Cliente } from "../pages/Cliente/Cliente"
 import { FormaPagamento } from "../pages/FormaPagamento/FormaPagamento"
 import { Entrada } from "../pages/Entrada/EntradaForm"
+import { Venda } from "../pages/Venda/Venda"
 // import Navbar from "../components/NavBar/Navbar"
 
 export const AppRoutes = () => {
@@ -26,6 +27,7 @@ export const AppRoutes = () => {
                 <Route path="/cliente" element={<Cliente />} />
                 <Route path="/formaPagamento" element={<FormaPagamento />} />
                 <Route path="/entrada" element={<Entrada />} />
+                <Route path="/venda" element={<Venda />} />
                 <Route path="/sair" element={<Sair />}/>
             </Routes>
         </BrowserRouter>
@@ -36,5 +38,4 @@ export const Sair = () => {
     localStorage.removeItem('usuarioLogado')
     window.location.href = 'http://localhost:3000'
     return null
-
 }

@@ -39,7 +39,8 @@ interface ProdutoFormProps {
     flagProdutosSalvos: any,
     setFlagProdutosSalvos: any,
     entradaSelecionada?: any,
-    resetProdutos?: any
+    resetProdutos?: any,
+    operation: string
 }
 
 export const ProdutoForm = (props: ProdutoFormProps) => {
@@ -110,6 +111,12 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
         } else console.log("Nao enviou")
     }
 
+
+    function salvarProdutosNaVenda() {
+        const produtosSave = produtos.map((produto: any) => {return {cod_ref: produto._id, quantidade: produto.quantidade, preco_venda: produto.preco_venda, nome: produto.nome}})
+        props.setProdutos(produtosSave)
+        props.setFlagProdutosSalvos(true)
+    }
 
     function salvarProdutosNaEntrada() {
         const produtosSave = produtos.map((produto: any) => {return {cod_ref: produto._id, quantidade: produto.quantidade, preco_custo: produto.preco_custo, nome: produto.nome}})
@@ -191,7 +198,7 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
 
                                 <Collapse in={!props.entradaSelecionada} unmountOnExit timeout={'auto'}>
                                     <Box sx={{textAlign: 'center', marginTop: 5}}>
-                                    <ButtonGeneric disabledConfirm={props.flagProdutosSalvos} title={props.flagProdutosSalvos ? 'SALVO' :'SALVAR PRODUTOS'} type="button" backgroundColor={ props.flagProdutosSalvos ? "#008584" : null} typeIcon={props.flagProdutosSalvos ? "confirmed" : "gravar"} height="55px" onClick={salvarProdutosNaEntrada}  />
+                                    <ButtonGeneric disabledConfirm={props.flagProdutosSalvos} title={props.flagProdutosSalvos ? 'SALVO' :'SALVAR PRODUTOS'} type="button" backgroundColor={ props.flagProdutosSalvos ? "#008584" : null} typeIcon={props.flagProdutosSalvos ? "confirmed" : "gravar"} height="55px" onClick={props.operation === "entrada" ? salvarProdutosNaEntrada : salvarProdutosNaVenda}  />
                                 </Box>
                                 </Collapse>
                                 
