@@ -123,7 +123,6 @@ export const Fornecedor = () => {
 
     return (
         <div>
-            <Header />
             <form onSubmit={handleSubmit(onSubmitFornecedor)}>
                 <Grid container direction={'column'}>
 

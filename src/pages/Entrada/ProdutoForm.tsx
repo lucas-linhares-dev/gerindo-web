@@ -157,7 +157,6 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
         setCardProdutos(false)
         setProdutos(props.entradaSelecionada?.produtos || [])
         setProdutoSelecionado(null)
-        console.log(props.entradaSelecionada?.produtos)
     }, [props.entradaSelecionada, props.resetProdutos])
 
     return (

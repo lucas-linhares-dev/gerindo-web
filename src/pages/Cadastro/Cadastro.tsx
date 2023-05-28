@@ -1,5 +1,5 @@
 
-import { Card, CardContent, Grid, Typography, createTheme } from "@mui/material";
+import { Box, Card, CardContent, Grid, Typography, createTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { UsuarioActions } from "../../actions/UsuarioActions";
 import { OpenModal } from "../../components/helpers/OpenModal";
@@ -49,7 +49,7 @@ export const Cadastro = () => {
         if(data.senha === data.senhaConfirm){
             usuarioActions.usuarioInsert(data).then((res: any) => {
                 if(res.status === 200){
-                    OpenModal(`Seja bem vindo ${res.data.nome}!`, () => window.location.href = 'http://localhost:3000')
+                    OpenModal(`Seja bem vindo ${res.data.nome}!`, () => window.location.href = 'http://localhost:3000/')
                 }
                 else{
                     console.log("ERROS BACK END")
@@ -63,7 +63,6 @@ export const Cadastro = () => {
 
     return (
         <div>  
-            <Header />
             <form onSubmit={handleSubmit(onSubmitCadastro)}>
                 <Grid container direction='column' alignItems='çenter' justifyItems='center'>
                     <Grid item >
@@ -72,7 +71,7 @@ export const Cadastro = () => {
 
                             </Grid>
                             <Grid item xs={12} md={6} lg={5} xl={4}>
-                                <Card sx={{margin: 5, marginTop: 15, backgroundColor: 'transparent', borderRadius: '10px', }}>
+                                <Card sx={{margin: 5, marginTop: 15, marginBottom: 2, backgroundColor: 'transparent', borderRadius: '10px', }}>
                                     <CardContent>
                                         <TitleCardGeneric title="Crie seu perfil" align="center" />
                                         <Grid container direction={'column'} alignContent='center' justifyContent={'center'}>
@@ -97,6 +96,10 @@ export const Cadastro = () => {
                                         </Grid>
                                     </CardContent>
                                 </Card>
+                                <Box sx={{textAlign: 'center'}}>
+                                    <Typography fontFamily= {'Kanit, sans-serif;'} fontWeight={'bold'} sx={{marginBottom: 2}}>Já tem conta?</Typography>
+                                    <ButtonGeneric title={"FAZER LOGIN"} typeIcon="entrar" backgroundColor={"#f5f5f5"} color={"#006666"} backgroundColorHover={'#008584'} colorHover='#f5f5f5' width="300px" onClick={() => {window.location.href = 'http://localhost:3000/'}} type="button"/>
+                                </Box>
                             </Grid>
                             <Grid item xs={12} md={3.5} lg={3} xl={4}>
                                 

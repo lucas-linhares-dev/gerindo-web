@@ -110,7 +110,6 @@ export const FormaPagamento = () => {
 
     return (
         <div>
-            <Header />
             <form onSubmit={handleSubmit(onSubmitFormaPagamento)}>
                 <Grid container direction={'column'}>
 

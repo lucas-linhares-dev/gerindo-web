@@ -112,7 +112,6 @@ export const Categoria = () => {
 
     return (
         <div>
-            <Header />
             <form onSubmit={handleSubmit(onSubmitCategoria)}>
                 <Grid container direction={'column'}>
 

@@ -93,7 +93,6 @@ export const Venda = () => {
     })
 
     const onSubmitVenda = async (data: any) => {
-        console.log(data)
         if(!vendaSelecionada){
             const confirm = await OpenModalConfirm("Cadastrar venda?")
             if(confirm){
@@ -153,7 +152,6 @@ export const Venda = () => {
 
     return (
         <div>
-            <Header />
             <form onSubmit={handleSubmit(onSubmitVenda)}>
                 <Grid container direction={'column'}>
 

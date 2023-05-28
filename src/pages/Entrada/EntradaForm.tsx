@@ -134,7 +134,6 @@ export const Entrada = () => {
 
     useEffect(() => {
         let vlrTotalEntrada = 0
-        console.log(produtos)
         produtos.forEach((produto: any) => {
             let preco_custo_format = produto.preco_custo.slice(0, produto.preco_custo.length - 3);
             preco_custo_format = Number(preco_custo_format)
@@ -147,7 +146,6 @@ export const Entrada = () => {
 
     return (
         <div>
-            <Header />
             <form onSubmit={handleSubmit(onSubmitEntrada)}>
                 <Grid container direction={'column'}>
 

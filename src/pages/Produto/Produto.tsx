@@ -130,7 +130,6 @@ export const Produto = () => {
 
     return (
         <div>
-            <Header />
             <form onSubmit={handleSubmit(onSubmitProduto)}>
                 <Grid container direction={'column'}>
 

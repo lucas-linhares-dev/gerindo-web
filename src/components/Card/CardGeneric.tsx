@@ -9,7 +9,7 @@ interface ICardGeneric {
 
 export const CardGeneric = (props: ICardGeneric) => {
     return(
-        <Card sx={{ margin: 3, backgroundColor: '#e6e6e6' }}>
+        <Card sx={{ margin: 3, backgroundColor: '#f5f5f5' }}>
             <CardContent>
                 <TitleCardGeneric title={props.title} />
 

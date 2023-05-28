@@ -10,17 +10,20 @@ import { Cliente } from "../pages/Cliente/Cliente"
 import { FormaPagamento } from "../pages/FormaPagamento/FormaPagamento"
 import { Entrada } from "../pages/Entrada/EntradaForm"
 import { Venda } from "../pages/Venda/Venda"
-// import Navbar from "../components/NavBar/Navbar"
+import Navbar from "../components/NavBar/Navbar"
 
 export const AppRoutes = () => {
 
+    const usuario = localStorage.getItem('usuarioLogado')
+
+
     return(
         <BrowserRouter>
-            {/* <Navbar /> */}
+            { usuario && <Navbar />}
             <Routes>
-                <Route path="/" element={<PaginaInicial />} />
+                <Route path="/" element={<Login />} />
+                <Route path="/pagina_inicial" element={<PaginaInicial />} />
                 <Route path="/cadastro" element={<Cadastro />} />
-                <Route path="/login" element={<Login />} />
                 <Route path="/categoria" element={<Categoria />} />
                 <Route path="/produto" element={<Produto />} />
                 <Route path="/fornecedor" element={<Fornecedor />} />

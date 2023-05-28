@@ -8,8 +8,7 @@ export function VendaActions() {
     }
 
     async function vendaInsert(data:any){
-        console.log("Ä")
-        console.log(data)
+
         try {
             const res = await axios.post("http://localhost:3001/vendas/", {data});
             return res

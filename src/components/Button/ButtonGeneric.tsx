@@ -25,7 +25,8 @@ interface IButtonGeneric {
     disabledPadrao?: boolean,
     disabledConfirm?: boolean,
     form?: any,
-
+    width?: string,
+    colorHover?: string
 }
 
 export const ButtonGeneric = (props: IButtonGeneric) => {
@@ -56,7 +57,7 @@ export const ButtonGeneric = (props: IButtonGeneric) => {
                 color: "#f5f5f5"
             },
             fontFamily: 'Kanit, sans-serif;',
-            width: props.fullWidth ? '100%' : null,
+            width: props.fullWidth ? '100%' : (props.width || null),
             border: 'none',
             paddingLeft: props.buttonPesquisar ? 5 : null,
             paddingRight: props.buttonPesquisar ? 5 : null,
@@ -70,6 +71,7 @@ export const ButtonGeneric = (props: IButtonGeneric) => {
             ':hover': {
                 backgroundColor: props.backgroundColorHover ? props.backgroundColorHover : '#008584',
                 border: 'none',
+                color: props.colorHover || null,
                 transform: 'translateY(-1px)'
             }
             }} 

@@ -122,7 +122,6 @@ export const Cliente = () => {
 
     return (
         <div>
-            <Header />
             <form onSubmit={handleSubmit(onSubmitCliente)}>
                 <Grid container direction={'column'}>
 

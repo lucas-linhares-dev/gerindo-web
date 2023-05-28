@@ -10,7 +10,6 @@ export const PaginaInicial = () => {
     console.log(usuarioLogado)
     return (
         <div>
-            <Header /> 
             <Card sx={{ width: '60%', margin: '5% auto auto auto', backgroundColor: 'black', borderRadius: '20px' }}>
                 <CardContent>
                     <Typography align='center' variant="h3" color='white'>
