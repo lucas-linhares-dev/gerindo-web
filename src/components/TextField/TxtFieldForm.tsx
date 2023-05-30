@@ -1,6 +1,9 @@
-import { TextField, Typography } from "@mui/material";
+import { IconButton, TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
+import {InputAdornment} from  '@mui/material'
 import { decimalDigitsMask, formatCNPJMask, formatCPFMask, formatPhone } from "../helpers/masks";
+import { useState } from "react";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
 
 interface ITxtFieldForm {
     name: string,
@@ -16,6 +19,10 @@ interface ITxtFieldForm {
 }
 
 export const TxtFieldForm = ( props : ITxtFieldForm) => {
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+
     return (
         <Controller
             name={props.name}
@@ -23,14 +30,33 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
             render={({ field: { onChange, value } }) => (
                 <>
                     <TextField
-                        inputProps={{style: { textAlign: props.textAlign || "left"}}}
-                        InputProps={{ style: { fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' } }}
+                        inputProps={{
+                            style: { textAlign: props.textAlign || "left"},    
+                        }}
+                        InputProps={{ 
+                            style: { fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' },
+                            endAdornment: (
+                                <InputAdornment position="end">
+
+                                  { props.type === 'password' && 
+                                  <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                  >
+                                    {showPassword ? <Visibility sx={{color: "#008584"}} /> : <VisibilityOff sx={{color: "#006666"}} />}
+                                  </IconButton>
+                                  }
+
+                                </InputAdornment>
+                            )
+                        
+                        }}
                         InputLabelProps={{ style: { color: props.error ? "#df2320" : "#008584", fontSize: '1.2rem', fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' } }} 
                         sx={{
                             width: 1,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor:props. error ? "#e20400" : "#008584",
+                                    borderColor:props.error ? "#e20400" : "#008584",
                                     borderWidth: props.borderWidth || 1,
                                     fontSize: '1.16rem',
                                 },
@@ -55,7 +81,7 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
                             }
                         }}
                         value={value || ""}
-                        type={props.type || 'text'}
+                        type= {props.type === 'password' ? (showPassword ? "text" : "password") : (props.type || 'text')}
                         label={props.label}
                         onChange={(e) => {
                             let value = e.target.value

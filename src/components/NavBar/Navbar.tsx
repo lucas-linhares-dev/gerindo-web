@@ -184,20 +184,21 @@ function Navbar() {
 
     const MenuUsuario = () => {
         return (
-            <Box sx={{ padding: '15px 16px', borderTop: '1px solid white' }}>
+            <Box sx={{ padding: '10px 16px 5px', borderTop: '1px solid white' }}>
                 <Grid container direction={'row'} sx={{}}>
                     <Box sx={{ width: '22%', backgroundColor: 'transparent', marginRight: 3, marginLeft: 1 , borderRadius: '50%'}}>
-                     {/* <img src={FOTO_CAIO_3} alt="perfil" width={65} height={65} style={{borderRadius: '50%'}}/> */}
+                     <img src={`data:image/jpeg;base64,${usuario.foto}`} alt="perfil" width={65} height={65} style={{borderRadius: '50%'}}/>
                     </Box>
                     <Box sx={{ width: '65%', paddingTop: 1 }}>
                         <Typography sx={{
                             fontFamily: 'Kanit, sans-serif;',
                             fontWeight: 'bold',
+                            fontSize: '18px'
                         }} color={'#FFD525'}>
                             {usuario?.nome} 
                         </Typography>
                         <Typography sx={{
-                            fontFamily: 'Kanit, sans-serif;', fontSize: '13px', marginTop: '1px'
+                            fontFamily: 'Kanit, sans-serif;', fontSize: '15px',
                         }} color={'white'}>
                             {usuario?.cargo}
                         </Typography>
@@ -218,7 +219,7 @@ function Navbar() {
                                 <MenuIcon/>
                             </IconButton>
                         </Box>
-                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontFamily: 'Kanit, sans-serif;', fontWeight: 'bold' }}>
                             {usuario?.nome} 
                         </Typography>
                         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}></Typography>
@@ -362,7 +363,7 @@ function Navbar() {
                             <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
                             </Grid>
                             <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
-                                <IconButton  sx={{}} onClick={() => {}}>
+                                <IconButton  sx={{}} onClick={() => {window.location.href = 'http://localhost:3000/pagina_inicial'}}>
                                     <NotificationsIcon sx={{color: '#006666'}} />
                                 </IconButton>
                             </Grid>
