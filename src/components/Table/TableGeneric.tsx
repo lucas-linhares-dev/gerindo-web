@@ -72,10 +72,17 @@ export default function TableGeneric(props: ITableGeneric) {
         setOrderBy(property);
     };
 
+    // useEffect(() => {
+    //     if(props.objFilters !== null && props.objFilters !== undefined && Object.keys(props.objFilters).length !== 0){
+    //         setValorSearch(props.objFilters);
+    //         props.setReload(true)
+    //     }
+    // }, [props, props.objFilters, setValorSearch])
+
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', backgroundColor: '#006666' }}>
             <RecoilRoot>
-                <TableToolBarGeneric setItemEdit={props.setItemEdit} setCardPesquisa={props.setCardPesquisa} setReload={props.setReload} enableCustomSearch={props.enableCustomSearch} objFilters={props.objFilters} widthTxtField={props.widthTxtField} title={props.title} atomPage={props.atomPage} atomFilter={props.atomFilter} enableSearch={props.enableSearch} />
+                <TableToolBarGeneric setItemEdit={props.setItemEdit} setCardPesquisa={props.setCardPesquisa} setReload={props.setReload} enableCustomSearch={props.enableCustomSearch} objFilters={props.objFilters} widthTxtField={props.widthTxtField} title={props.title} atomPage={props.atomPage} atomFilter={props.atomFilter} enableSearch={props.enableSearch}/>
                 <TableContainer sx={{ height: props.height }}>
                     <Scrollbars renderThumbVertical={({ style, ...props }) =>
                             <Box {...props}
@@ -147,6 +154,8 @@ function TableContainerGeneric(props: ITableContainerGeneric) {
         //         break
         // }
     }, [props.reload])
+
+
 
 
     switch (state) {
@@ -320,21 +329,32 @@ interface ITableToolBarGeneric {
 
 function TableToolBarGeneric(props: ITableToolBarGeneric) {
 
-    const [search, setSearch] = useState(true)
-    const setPage = useSetRecoilState(props.atomPage);
+
     const setValorSearch = useSetRecoilState(props.atomFilter);
 
-    const txtFieldSearch = useRef<HTMLInputElement | null>(null)
+
+    const [search, setSearch] = useState(true)
+    const setPage = useSetRecoilState(props.atomPage);
+
+    const txtFieldSearch = useRef<HTMLInputElement | null>(null)    
 
     const onClickSearch = () => {
         setSearch(true)
         txtFieldSearch.current?.focus()
     }
 
+    useEffect(() => {
+        if(props.enableCustomSearch === true){
+            setValorSearch(props.objFilters);
+            props.setReload(true)
+        }
+    }, [props.objFilters])
+
 
     if (props.enableSearch === true) {
         return (
             <Toolbar>
+                <>
                 <Box sx={{ width: '100%', textAlign: 'left', margin: 1, marginRight: 0 }}>
                     <TextField
                         sx={{
@@ -378,38 +398,25 @@ function TableToolBarGeneric(props: ITableToolBarGeneric) {
                             props.setReload(true)
                         }} />
                 </Box>
-                <Box>
+                <Box sx={{width: '100%', display: 'flex', alignItems: 'right', justifyContent: 'right'}}>
                     <IconButton aria-label="search" sx={{ color: '#f5f5f5', marginTop: 0, }} onClick={() => { props.setCardPesquisa(false) ; props.setItemEdit(null) }}>
                         <ArrowUpwardIcon sx={{ fontSize: 30 }} />
                     </IconButton>
                 </Box>
-
+            </>
             </Toolbar>
+            
         )
     }
 
     else {
         if (props.enableCustomSearch === true) {
             return (
-                <Toolbar>
-                    <Typography
-                        sx={{
-                            marginRight: '5px',
-                            flex: '1 1 100%',
-                            fontSize: 24,
-                            color: "#2B7C41",
-                            fontWeight: 'bold',
-                        }}
-                        id="tableTitle"
-                        color="text.secondary"
-                        gutterBottom
-                    >
-                        {props.title}
-                    </Typography>
-                    <Box>
-                        <ButtonGeneric marginRight='0px' title="Filtrar" type="button" onClick={() => { setValorSearch(props.objFilters); props.setReload(true) }} typeIcon={'filtrar'} />
-                    </Box>
-                </Toolbar>
+                <Box sx={{width: '100%', display: 'flex', alignItems: 'right', justifyContent: 'right', height: '60px'}}>
+                    <IconButton aria-label="search" sx={{ color: '#f5f5f5', marginTop: 0, marginRight: 2 }} onClick={() => { props.setCardPesquisa(false) ; props.setItemEdit(null) }}>
+                        <ArrowUpwardIcon sx={{ fontSize: 30 }} />
+                    </IconButton>
+                </Box>
             )
         }
         else {

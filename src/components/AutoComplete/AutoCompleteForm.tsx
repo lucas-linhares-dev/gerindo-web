@@ -39,7 +39,7 @@ export const AutoCompleteForm = (props: IAutoCompleteForm) => {
         return (
             <Typography component="li" {...dataSet[0]} noWrap style={inlineStyle} sx={{fontFamily: "Kanit, sans-serif", fontWeight: 'bold'}}>
                 {dataSet[0].key}
-                {`#${dataSet[2] + 1} - ${dataSet[1]}`}
+                {/* {dataSet[1]} */}
             </Typography>
         );
     }

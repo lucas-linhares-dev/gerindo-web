@@ -36,6 +36,42 @@ export const vendaSearchAtom = atom({
     default: ''
 })
 
+export const vendaSelectorFilter = selector({
+    key: 'vendaSelectorFilter',
+    get: async ({ get }) => {
+
+        // let page = get(credorPageState)
+        // let rowsPerPage = get(credorRowsPerPageState)
+
+        let objFilters = get(vendaFilterAtom)
+
+        const response = await getVendasFilter(objFilters);
+        if(response.status === 200){
+            return response.data
+        }
+        else {
+            return {vendas: [], length: 0}
+        }
+        
+    },
+});
+
+async function getVendasFilter(objFilters:any) {
+    console.log(objFilters)
+    const res = await axios.get("http://localhost:3001/vendas_filter",  { params: {
+        objFilters
+    }});;
+
+    return res
+};
+
+export const vendaFilterAtom = atom({
+    key: 'vendaFilterAtom',
+    default: ''
+})
+
+
+
 export const vendaSelector = selector({
     key: 'vendaSelector',
     get: async ({ get }) => {

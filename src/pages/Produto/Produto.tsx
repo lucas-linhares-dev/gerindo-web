@@ -20,6 +20,7 @@ import { categoriaSelector } from "../../states/CategoriaState";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { InputImage } from "../../components/Input/InputImage";
+import { validateEAN13, validateEAN14, validateEAN8 } from "../../components/helpers/validateEAN";
 
 interface ProdutoForm {
     nome: string,
@@ -62,11 +63,34 @@ export const Produto = () => {
             .required("Campo obrigatório")
             .min(3, 'Mínimo 3 letras'),
         preco_venda: yup.string()
-            .required("Campo obrigatório")
+            .required("Campo obrigatório"),
+        
+        codigo: yup.string()
+            .max(14, "*Max. 14 caracteres")
+            .nullable()
+            .test('codigo', 'Código de barras inválido', function (value) {
+                if (value === undefined || value === null || value.trim() === '') {
+                    return true
+                } 
+                else if (value.length !== 8 && value.length !== 13 && value.length !== 14) {
+                    return false
+                } 
+                else if(value.length === 8){
+                    return validateEAN8(value)
+                }
+                else if (value.length === 13) {
+                    return validateEAN13(value)
+                } 
+                else if (value.length === 14) {
+                    return validateEAN14(value)
+                }
     })
+})
 
     const { handleSubmit, formState: { errors }, control, reset, setValue } = useForm<ProdutoForm>({
-        resolver: yupResolver(validationSchema)
+        resolver: yupResolver(validationSchema),
+        defaultValues: initialValues,
+        mode: 'onBlur'
     })
 
 
@@ -188,7 +212,7 @@ export const Produto = () => {
                                                         <TxtFieldForm name={"preco_custo"} control={control} label={"Preço de custo"} type="decimal" error={errors.preco_custo?.message} />
                                                     </Grid>
                                                     <Grid item xs={12} md={8} lg={12} xl={12}>
-                                                        <TxtFieldForm name={"codigo"} control={control} label={"Codigo de barras"} error={errors.codigo?.message} />
+                                                        <TxtFieldForm name={"codigo"} control={control} label={"Codigo EAN"} error={errors.codigo?.message} />
                                                     </Grid>
                                                     <Grid item xs={12} md={5} lg={5} xl={5}>
                                                         <GetAutoCompleteForm label={"Categoria"} name={"categoria"} control={control} selector={categoriaSelector} optionLabel={"nome"} />
@@ -214,7 +238,7 @@ export const Produto = () => {
                         <Grid item>
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: 2 }}>
                                 {produtoSelecionado &&
-                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirProduto} />
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#f5f5f5'} backgroundColorHover={'red'} type="button" onClick={excluirProduto} colorHover="#f5f5f5" />
                                 }
                                 <ButtonGeneric title={produtoSelecionado ? 'alterar' : 'cadastrar'} />
                             </Box>
@@ -247,8 +271,8 @@ const SearchTable = (props: ITableFProdutos) => {
             enableOrder: true,
             align: 'center',
             width: '10%',
-            itemSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
-            itemNoSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
+            itemSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
+            itemNoSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
             checkField: true
         },
         {

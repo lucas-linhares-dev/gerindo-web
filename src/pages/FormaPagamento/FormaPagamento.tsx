@@ -160,7 +160,7 @@ export const FormaPagamento = () => {
                         <Grid item>
                             <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
                                 {formaPagamentoSelecionada &&
-                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirFormaPagamento} />
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#f5f5f5'} backgroundColorHover={'red'} type="button" onClick={excluirFormaPagamento} colorHover="#f5f5f5" />
                                 }
                                 <ButtonGeneric title={formaPagamentoSelecionada ? 'alterar' : 'cadastrar'} />
                             </Box>
@@ -193,8 +193,8 @@ const TableFormasPagamento = (props: ITableFormasPagamento) => {
             enableOrder: true,
             align: 'center',
             width: '10%',
-            itemSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
-            itemNoSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
+            itemSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
+            itemNoSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
             checkField: true
         },
         {

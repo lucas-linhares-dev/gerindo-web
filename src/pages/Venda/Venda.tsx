@@ -18,7 +18,7 @@ import { ProdutoActions } from "../../actions/ProdutoActions";
 import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { FornecedorActions } from "../../actions/FornecedorActions";
 import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, fornecedorSelector, fornecedorSelectorNome } from "../../states/FornecedorState";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ClienteActions } from "../../actions/ClienteActions";
 import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelector, clienteSelectorNome } from "../../states/ClienteState";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
@@ -30,7 +30,7 @@ import { EntradaActions } from "../../actions/EntradaActions";
 import { entradaPageState, entradaRowsPerPageState, entradaSearchAtom, entradaSelectorCodigo } from "../../states/EntradaState";
 import { formaPagamentoSelector } from "../../states/FormaPagamentoState";
 import { ProdutoForm } from "../Entrada/ProdutoForm";
-import { vendaSearchAtom, vendaSelectorCodigo } from "../../states/VendaState";
+import { vendaFilterAtom, vendaPageState, vendaRowsPerPageState, vendaSearchAtom, vendaSelectorCodigo, vendaSelectorFilter } from "../../states/VendaState";
 import { VendaActions } from "../../actions/VendaActions";
 import { decimalDigitsMask } from "../../components/helpers/masks";
 
@@ -47,7 +47,7 @@ export interface IVenda {
 
 export const Venda = () => {
 
-    const vendaActions = VendaActions() 
+    const vendaActions = VendaActions()
 
     const [produtos, setProdutos] = useState<any>([])
 
@@ -94,15 +94,15 @@ export const Venda = () => {
     })
 
     const onSubmitVenda = async (data: any) => {
-        if(!vendaSelecionada){
+        if (!vendaSelecionada) {
             const confirm = await OpenModalConfirm("Cadastrar venda?")
-            if(confirm){
-                data.produtos = produtos.map((produto: any) => {return {cod_ref: produto.cod_ref, quantidade: produto.quantidade, nome: produto.nome}})
-    
+            if (confirm) {
+                data.produtos = produtos.map((produto: any) => { return { cod_ref: produto.cod_ref, quantidade: produto.quantidade, nome: produto.nome } })
+
                 vendaActions.vendaInsert(data).then((res: any) => {
                     if (res.status === 200) {
                         OpenModal(`Venda cadastrada com sucesso!`, () => { })
-                        reset({...initialValues})
+                        reset({ ...initialValues })
                         setResetProdutos(true)
                     }
                     else {
@@ -111,14 +111,14 @@ export const Venda = () => {
                 })
             }
         }
-        else{
+        else {
             const confirm = await OpenModalConfirm("Alterar venda?")
-            if(confirm){    
+            if (confirm) {
                 vendaActions.vendaUpdate(data).then((res: any) => {
                     if (res.status === 200) {
                         OpenModal(`Venda alterada com sucesso!`, () => { })
                         setReload((prev: any) => !prev)
-                        
+
                     }
                     else {
                         console.log("ERROS BACK END")
@@ -138,26 +138,25 @@ export const Venda = () => {
         }
     }, [vendaSelecionada, initialValues, reset])
 
-    
+
     useEffect(() => {
         let vlrTotalVenda = 0
         produtos.forEach((produto: any) => {
             let preco_venda_format = produto.preco_venda.slice(0, produto.preco_venda.length - 3);
             preco_venda_format = Number(preco_venda_format)
             let vlrTotalProduto = preco_venda_format * produto.quantidade
-            vlrTotalVenda+=vlrTotalProduto
+            vlrTotalVenda += vlrTotalProduto
         });
         console.log(vlrTotalVenda)
-        setValue('vlr_total', decimalDigitsMask((vlrTotalVenda*100).toString(), 2))
+        setValue('vlr_total', decimalDigitsMask((vlrTotalVenda * 100).toString(), 2))
     }, [produtos, setValue])
 
 
     return (
         <div>
-            <form onSubmit={handleSubmit(onSubmitVenda)}>
                 <Grid container direction={'column'}>
 
-                    <TitlePageGeneric title={'Vendas'}/>
+                    <TitlePageGeneric title={'Vendas'} />
 
 
                     {/* {hasError &&
@@ -178,7 +177,7 @@ export const Venda = () => {
                             <Grid container
                                 direction="row" spacing={1.5}>
                                 <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                    <TableVendas reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} vendaSelecionada={vendaSelecionada} setVendaSelecionada={setVendaSelecionada} atomFilter={vendaSearchAtom} selector={vendaSelectorCodigo} />
+                                    <TableVendas reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} vendaSelecionada={vendaSelecionada} setVendaSelecionada={setVendaSelecionada} atomFilter={vendaFilterAtom} selector={vendaSelectorFilter} />
                                 </Grid>
                             </Grid>
 
@@ -187,20 +186,22 @@ export const Venda = () => {
 
                     <Grid item>
 
-                        <Box sx={{margin: 2, marginTop: 4}}>
-                            <CardGeneric title="Dados da entrada">
+                        <Box sx={{ margin: 2, marginTop: 4 }}>
+                            <CardGeneric title="Dados da venda">
+                            <form onSubmit={handleSubmit(onSubmitVenda)}>
+
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item  xs={12} md={9} lg={10} xl={3} >
+                                    <Grid item xs={12} md={9} lg={10} xl={3} >
                                         <TxtFieldForm name={"codigo"} control={control} label={"Codigo"} error={errors.codigo?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={3} lg={2} xl={1.5} >
                                         <TxtFieldForm name={"data"} control={control} label={"Data"} error={errors.data?.message} type={'date'} readOnly={vendaSelecionada} />
                                     </Grid>
                                     <Grid item xs={12} md={5} lg={5} xl={3} >
-                                        <GetAutoCompleteForm label={"Cliente"} name={"cliente"} control={control} selector={clienteSelector} optionLabel={"nome"} />                                    
+                                        <GetAutoCompleteForm label={"Cliente"} name={"cliente"} control={control} selector={clienteSelector} optionLabel={"nome"} />
                                     </Grid>
                                     <Grid item xs={12} md={5} lg={5} xl={2.5} >
-                                        <GetAutoCompleteForm label={"Forma pag."} name={"forma_pag"} control={control} selector={formaPagamentoSelector} optionLabel={"nome"} />                                    
+                                        <GetAutoCompleteForm label={"Forma pag."} name={"forma_pag"} control={control} selector={formaPagamentoSelector} optionLabel={"nome"} />
                                     </Grid>
                                     <Grid item xs={12} md={2} lg={2} xl={2} >
                                         <TxtFieldForm name={"vlr_total"} control={control} label={"Vlr. total"} type="decimal" error={errors.vlr_total?.message} readOnly={vendaSelecionada} />
@@ -209,18 +210,18 @@ export const Venda = () => {
                                         <TxtFieldForm name={"descricao"} control={control} label={"Descricao"} error={errors.descricao?.message} />
                                     </Grid>
                                 </Grid>
+                            </form>
                             </CardGeneric>
                         </Box>
 
                         <Grid item>
-                            <Box sx={{margin: 2, marginRight: 2.5 , display: 'flex', justifyContent: 'flex-end' }}>
-                                <ButtonGeneric title={ !vendaSelecionada ? 'cadastrar' : 'alterar'} disabledPadrao={!flagprodutosSalvos && !vendaSelecionada}/>
+                            <Box sx={{ margin: 2, marginRight: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
+                                <ButtonGeneric title={!vendaSelecionada ? 'cadastrar' : 'alterar'} disabledPadrao={!flagprodutosSalvos && !vendaSelecionada} />
                             </Box>
                         </Grid>
                     </Grid>
                 </Grid>
-            </form>
-            <ProdutoForm setProdutos={setProdutos} resetProdutos={resetProdutos} flagProdutosSalvos={flagprodutosSalvos} setFlagProdutosSalvos={setFlagProdutosSalvos} entradaSelecionada={vendaSelecionada} operation={"venda"}/>
+            <ProdutoForm setProdutos={setProdutos} resetProdutos={resetProdutos} flagProdutosSalvos={flagprodutosSalvos} setFlagProdutosSalvos={setFlagProdutosSalvos} entradaSelecionada={vendaSelecionada} operation={"venda"} />
         </div >
     )
 }
@@ -236,7 +237,14 @@ interface ITableVendas {
 }
 
 
+interface ITableVendasForm {
+    cliente: any,
+    forma_pag: any
+}
+
 const TableVendas = (props: ITableVendas) => {
+
+    const [objFilters, setObjFilters] = useState<any>({})
 
 
     const columns = [
@@ -286,8 +294,40 @@ const TableVendas = (props: ITableVendas) => {
         },
     ]
 
+    const { setValue, control, getValues } = useForm<ITableVendasForm>()
+
+    const onSubmitFiltrar = (data: any) => {
+        console.log(data)
+        setObjFilters({
+            cliente: data.cliente?._id,
+            forma_pag: data.forma_pag?._id
+        })
+    }
+
     return (
-        <TableGeneric atomPage={entradaPageState} atomRowPerPage={entradaRowsPerPageState} setCardPesquisa={props.setCardPesquisa} reload={props.reload} setReload={props.setReload} tabela="vendas" title='Pesquisar' setItemEdit={props.setVendaSelecionada} itemEdit={props.vendaSelecionada} atomFilter={props.atomFilter} atomSelectorList={props.selector} columns={columns} widthTxtField={"200px"} enableSearch={true} enablePagination={false} height={400} />
+        <>
+            <form>
+                <CardGeneric title="Filtrar">
+                    <Grid container direction={'row'} spacing={1.5}>
+                        <Grid item xs={12} md={6} lg={6} xl={6} >
+                            <GetAutoCompleteForm label={"Cliente"} name={"cliente"} control={control} selector={clienteSelector} optionLabel={"nome"} />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={6} xl={6} >
+                            <GetAutoCompleteForm label={"Forma pag."} name={"forma_pag"} control={control} selector={formaPagamentoSelector} optionLabel={"nome"} />
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12} xl={12} >
+                            <ButtonGeneric title={"Filtrar"} fullWidth typeIcon="filtrar" height="55px" type="button" onClick={() => onSubmitFiltrar(getValues())} />
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={612} xl={12}>
+                            <TableGeneric atomPage={vendaPageState} atomRowPerPage={vendaRowsPerPageState} setCardPesquisa={props.setCardPesquisa} reload={props.reload} setReload={props.setReload} tabela="vendas" title='Pesquisar' setItemEdit={props.setVendaSelecionada} itemEdit={props.vendaSelecionada} atomFilter={props.atomFilter} atomSelectorList={props.selector} columns={columns} widthTxtField={"200px"} enableSearch={false} enablePagination={false} height={400} enableCustomSearch={true} objFilters={objFilters} />
+                        </Grid>
+                    </Grid>
+
+                </CardGeneric>
+            </form>
+        </>
     )
-}   
+
+
+}
 

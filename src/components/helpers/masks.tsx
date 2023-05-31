@@ -88,3 +88,25 @@ export const formatPhone = (value: string) => {
 
   return maskedValue;
 };
+
+export function formatCEPMask(cep: string) {
+  var value = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+  var formattedValue = '';
+
+  if (value.length > 8) {
+    formattedValue = value.substring(0, 8);
+  } else {
+    formattedValue = value;
+  }
+
+  if (formattedValue.length > 5) {
+    formattedValue = formattedValue.substring(0, 5) + '-' + formattedValue.substring(5);
+  }
+
+  return formattedValue;
+}
+
+
+export function removerMascara(value: string) {
+  return value.replace(/\D/g, '');
+}

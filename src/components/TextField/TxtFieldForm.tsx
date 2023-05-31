@@ -1,7 +1,7 @@
 import { IconButton, TextField, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
 import {InputAdornment} from  '@mui/material'
-import { decimalDigitsMask, formatCNPJMask, formatCPFMask, formatPhone } from "../helpers/masks";
+import { decimalDigitsMask, formatCEPMask, formatCNPJMask, formatCPFMask, formatPhone } from "../helpers/masks";
 import { useState } from "react";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 
@@ -99,6 +99,9 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
                             }
                             if(props.mask === 'telefone'){
                                 value = formatPhone(value)
+                            }
+                            if(props.mask === 'cep'){
+                                value = formatCEPMask(value)
                             }
 
                             onChange(value)

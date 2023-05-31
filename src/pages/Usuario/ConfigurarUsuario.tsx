@@ -54,7 +54,8 @@ export const ConfigurarUsuario = () => {
 
     const { setValue, handleSubmit, formState: { errors }, control, watch } = useForm<IConfigurarUsuario>({
         resolver: yupResolver(validationSchema),
-        defaultValues: initialValues
+        defaultValues: initialValues,
+        mode: 'onBlur'
     })
 
 
@@ -104,10 +105,10 @@ export const ConfigurarUsuario = () => {
                                     <CardContent>
                                         <TitleCardGeneric title="Configure seu perfil" align="center" />
                                         <Grid container direction={'column'} alignContent='center' justifyContent={'center'}>
-                                            {hasError && <Grid item sx={{ marginBottom: 4 }}>
+                                            {/* {hasError && <Grid item sx={{ marginBottom: 4 }}>
                                                 <AlertError title={"Atenção"} type={'warning'} style={'filled'} msgError="As senhas informadas não condizem!" />
-                                            </Grid>}
-                                            <Grid item sx={{ width: '100%', display: 'flex', alignItens: 'center', justifyContent: 'center'}}>
+                                            </Grid>} */}
+                                            <Grid item sx={{ width: '100%', display: 'flex', alignItens: 'center', justifyContent: 'center', marginBottom: 2}}>
                                                 <InputImage control={control} setValue={setValue}/>
                                             </Grid>
                                             <Grid item sx={{ marginBottom: 3, width: '100%' }}>

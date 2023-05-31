@@ -20,12 +20,19 @@ import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 import { CardGeneric } from "../../components/Card/CardGeneric";
+import { useMunicipiosActions } from "../../actions/municipiosAction";
 
 interface FornecedorForm {
     nome: string,
     email: string,
-    telefone: string, // mascara
-    cnpj: string // mascara
+    telefone: string,
+    cnpj: string 
+    cep: string,
+    endereco: string,
+    bairro: string,
+    numero: number,
+    complemento: string,
+    municipio: string
 }
 
 export const Fornecedor = () => {
@@ -121,6 +128,20 @@ export const Fornecedor = () => {
         }
     }, [fornecedorSelecionado, initialValues, reset])
 
+
+    const municipiosActions = useMunicipiosActions();
+
+    function onBlurCEP(event: any) {
+        let cep = event.target.value
+        if (cep !== '' && (cep.length === 9 || cep.length === 8)) {
+          municipiosActions.load_endereco(cep).then((data: any) => {
+            console.log(data)
+            setValue("endereco", data?.logradouro)
+            setValue("bairro", data?.bairro)
+          })
+        }
+    }
+
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmitFornecedor)}>
@@ -156,29 +177,56 @@ export const Fornecedor = () => {
                     <Grid item>
 
                         <Box sx={{ margin: 2, marginTop: 4 }}>
-                            <CardGeneric title="Informações gerais">
+                            <CardGeneric title="Informações pessoais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item xs={12} md={6} lg={5} xl={5}>
+                                    <Grid item xs={12} md={4.75} lg={4.5} xl={5}>
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={6} lg={3} xl={4}>
+                                    <Grid item xs={12} md={4.75} lg={3} xl={4}>
                                         <TxtFieldForm name={"email"} control={control} label={"E-mail"} error={errors.email?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={6} lg={2} xl={1.5}>
+                                    <Grid item xs={12} md={2.5} lg={2} xl={1.5}>
                                         <TxtFieldForm name={"telefone"} control={control} label={"Telefone"} mask={'telefone'} error={errors.telefone?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={6} lg={2} xl={1.5}>
+                                    <Grid item xs={12} md={3} lg={2.5} xl={1.5}>
                                         <TxtFieldForm name={"cnpj"} control={control} label={"CNPJ"} textAlign={'right'} mask="cnpj" error={errors.cnpj?.message} />
+                                    </Grid>
+                                    
+                                </Grid>
+                            </CardGeneric>
+                        </Box>
+
+                        <Box sx={{ margin: 2, marginTop: 4 }}>
+                            <CardGeneric title="Logradouro">
+                                <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
+                                    <Grid item xs={12} md={2.5} lg={1.5} xl={1}>
+                                        <TxtFieldForm name={"cep"} control={control} label={"CEP"} mask="cep" onBlur={onBlurCEP} error={errors.cep?.message} />
+                                    </Grid>
+                                    <Grid item xs={12} md={6.5} lg={3} xl={3}>
+                                        <TxtFieldForm name={"endereco"} control={control} label={"Endereço"} error={errors.endereco?.message} />
+                                    </Grid>
+                                    <Grid item xs={12} md={4} lg={2.5} xl={2}>
+                                        <TxtFieldForm name={"bairro"} control={control} label={"Bairro"} error={errors.bairro?.message} />
+                                    </Grid>
+                                    <Grid item xs={12} md={2} lg={1.5} xl={1}>
+                                        <TxtFieldForm name={"numero"} control={control} label={"Numero"} error={errors.numero?.message} />
+                                    </Grid>
+                                    <Grid item xs={12} md={6} lg={3.5} xl={5}>
+                                        <TxtFieldForm name={"municipio"} control={control} label={"Municipio"} error={errors.municipio?.message} />
+                                    </Grid>
+                                    <Grid item xs={12} md={12} lg={12} xl={12}>
+                                        <TxtFieldForm name={"complemento"} control={control} label={"Complemento"} error={errors.complemento?.message} />
                                     </Grid>
                                 </Grid>
                             </CardGeneric>
                         </Box>
+                            
 
 
                         <Grid item>
                             <Box sx={{ margin: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
                                 {fornecedorSelecionado &&
-                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#fafafa'} backgroundColorHover={'red'} type="button" onClick={excluirFornecedor} />
+                                    <ButtonGeneric title='excluir' color={'red'} typeIcon="excluir" backgroundColor={'#f5f5f5'} backgroundColorHover={'red'} type="button" onClick={excluirFornecedor} colorHover="#f5f5f5" />
                                 }
                                 <ButtonGeneric title={fornecedorSelecionado ? 'alterar' : 'cadastrar'} />
                             </Box>
@@ -223,8 +271,8 @@ const TableFornecedores = (props: ITableFornecedores) => {
             enableOrder: true,
             align: 'center',
             width: '10%',
-            itemSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
-            itemNoSelected: <IconButton sx={{ color: "#2B7C41", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
+            itemSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;' }}><CheckBoxIcon /></IconButton>,
+            itemNoSelected: <IconButton sx={{ color: "#f5f5f5", outline: 'none !important;;', }}><CheckBoxOutlineBlankIcon /></IconButton>,
             checkField: true
         },
         {
