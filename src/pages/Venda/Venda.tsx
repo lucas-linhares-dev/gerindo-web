@@ -45,13 +45,14 @@ export interface IVenda {
     produtos: any
 }
 
+const dataAtual = getData()
+
+
 export const Venda = () => {
 
     const vendaActions = VendaActions()
 
     const [produtos, setProdutos] = useState<any>([])
-
-    const dataAtual = getData()
 
     const [flagprodutosSalvos, setFlagProdutosSalvos] = useState<any>(false)
 
@@ -154,40 +155,40 @@ export const Venda = () => {
 
     return (
         <div>
-                <Grid container direction={'column'}>
+            <Grid container direction={'column'}>
 
-                    <TitlePageGeneric title={'Vendas'} />
+                <TitlePageGeneric title={'Vendas'} />
 
 
-                    {/* {hasError &&
+                {/* {hasError &&
                      <Grid item sx={{ marginBottom: 4 }}>
                         <AlertError title={"Atenção"} type={'warning'} style={'filled'} msgError="As senhas informadas não condizem!" />
                     </Grid>
                     } */}
 
-                    <Collapse in={!cardPesquisar}>
-                        <Box sx={{ marginTop: 5, marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
-                            <ButtonGeneric buttonPesquisar title='Pesquisar' typeIcon="pesquisar" type="button" onClick={() => { setCardPesquisar(true) }} />
-                        </Box>
-                    </Collapse>
+                <Collapse in={!cardPesquisar}>
+                    <Box sx={{ marginTop: 5, marginBottom: 5, display: 'flex', justifyContent: 'center' }}>
+                        <ButtonGeneric buttonPesquisar title='Pesquisar' typeIcon="pesquisar" type="button" onClick={() => { setCardPesquisar(true) }} />
+                    </Box>
+                </Collapse>
 
-                    <Collapse in={cardPesquisar} unmountOnExit timeout={'auto'}>
-                        <Grid item>
-
-                            <Grid container
-                                direction="row" spacing={1.5}>
-                                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                    <TableVendas reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} vendaSelecionada={vendaSelecionada} setVendaSelecionada={setVendaSelecionada} atomFilter={vendaFilterAtom} selector={vendaSelectorFilter} />
-                                </Grid>
-                            </Grid>
-
-                        </Grid>
-                    </Collapse>
-
+                <Collapse in={cardPesquisar} unmountOnExit timeout={'auto'}>
                     <Grid item>
 
-                        <Box sx={{ margin: 2, marginTop: 4 }}>
-                            <CardGeneric title="Dados da venda">
+                        <Grid container
+                            direction="row" spacing={1.5}>
+                            <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
+                                <TableVendas reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} vendaSelecionada={vendaSelecionada} setVendaSelecionada={setVendaSelecionada} atomFilter={vendaFilterAtom} selector={vendaSelectorFilter} />
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+                </Collapse>
+
+                <Grid item>
+
+                    <Box sx={{ margin: 2, marginTop: 4 }}>
+                        <CardGeneric title="Dados da venda">
                             <form onSubmit={handleSubmit(onSubmitVenda)}>
 
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
@@ -211,16 +212,16 @@ export const Venda = () => {
                                     </Grid>
                                 </Grid>
                             </form>
-                            </CardGeneric>
-                        </Box>
+                        </CardGeneric>
+                    </Box>
 
-                        <Grid item>
-                            <Box sx={{ margin: 2, marginRight: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
-                                <ButtonGeneric title={!vendaSelecionada ? 'cadastrar' : 'alterar'} disabledPadrao={!flagprodutosSalvos && !vendaSelecionada} />
-                            </Box>
-                        </Grid>
+                    <Grid item>
+                        <Box sx={{ margin: 2, marginRight: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
+                            <ButtonGeneric title={!vendaSelecionada ? 'cadastrar' : 'alterar'} disabledPadrao={!flagprodutosSalvos && !vendaSelecionada} />
+                        </Box>
                     </Grid>
                 </Grid>
+            </Grid>
             <ProdutoForm setProdutos={setProdutos} resetProdutos={resetProdutos} flagProdutosSalvos={flagprodutosSalvos} setFlagProdutosSalvos={setFlagProdutosSalvos} entradaSelecionada={vendaSelecionada} operation={"venda"} />
         </div >
     )
@@ -239,7 +240,9 @@ interface ITableVendas {
 
 interface ITableVendasForm {
     cliente: any,
-    forma_pag: any
+    forma_pag: any,
+    dt_inicial: string,
+    dt_final: string
 }
 
 const TableVendas = (props: ITableVendas) => {
@@ -294,13 +297,20 @@ const TableVendas = (props: ITableVendas) => {
         },
     ]
 
-    const { setValue, control, getValues } = useForm<ITableVendasForm>()
+    const { setValue, control, getValues } = useForm<ITableVendasForm>({
+        defaultValues: {
+            dt_inicial: dataAtual,
+            dt_final: dataAtual
+        }
+    })
 
     const onSubmitFiltrar = (data: any) => {
         console.log(data)
         setObjFilters({
             cliente: data.cliente?._id,
-            forma_pag: data.forma_pag?._id
+            forma_pag: data.forma_pag?._id,
+            dt_inicial: data.dt_inicial,
+            dt_final: data.dt_final
         })
     }
 
@@ -309,11 +319,17 @@ const TableVendas = (props: ITableVendas) => {
             <form>
                 <CardGeneric title="Filtrar">
                     <Grid container direction={'row'} spacing={1.5}>
-                        <Grid item xs={12} md={6} lg={6} xl={6} >
+                        <Grid item xs={12} md={6} lg={4} xl={4} >
                             <GetAutoCompleteForm label={"Cliente"} name={"cliente"} control={control} selector={clienteSelector} optionLabel={"nome"} />
                         </Grid>
-                        <Grid item xs={12} md={6} lg={6} xl={6} >
+                        <Grid item xs={12} md={6} lg={4} xl={4} >
                             <GetAutoCompleteForm label={"Forma pag."} name={"forma_pag"} control={control} selector={formaPagamentoSelector} optionLabel={"nome"} />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={2} xl={2} >
+                            <TxtFieldForm name={"dt_inicial"} control={control} label={"Data Inicial"} type={'date'}/>
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={2} xl={2} >
+                            <TxtFieldForm name={"dt_final"} control={control} label={"Data Final"} type={'date'}/>
                         </Grid>
                         <Grid item xs={12} md={12} lg={12} xl={12} >
                             <ButtonGeneric title={"Filtrar"} fullWidth typeIcon="filtrar" height="55px" type="button" onClick={() => onSubmitFiltrar(getValues())} />

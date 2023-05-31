@@ -30,6 +30,7 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
             render={({ field: { onChange, value } }) => (
                 <>
                     <TextField
+                        focused = {props.type === 'date' && true}
                         inputProps={{
                             style: { textAlign: props.textAlign || "left"},    
                         }}

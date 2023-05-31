@@ -60,3 +60,36 @@ export const entradaRowsPerPageState = atom({
 })
 
 
+export const entradaSelectorFilter = selector({
+    key: 'entradaSelectorFilter',
+    get: async ({ get }) => {
+
+        // let page = get(credorPageState)
+        // let rowsPerPage = get(credorRowsPerPageState)
+
+        let objFilters = get(entradaFilterAtom)
+
+        const response = await getEntradasFilter(objFilters);
+        if(response.status === 200){
+            return response.data
+        }
+        else {
+            return {entradas: [], length: 0}
+        }
+        
+    },
+});
+
+async function getEntradasFilter(objFilters:any) {
+    console.log(objFilters)
+    const res = await axios.get("http://localhost:3001/entradas_filter",  { params: {
+        objFilters
+    }});;
+
+    return res
+};
+
+export const entradaFilterAtom = atom({
+    key: 'entradaFilterAtom',
+    default: ''
+})

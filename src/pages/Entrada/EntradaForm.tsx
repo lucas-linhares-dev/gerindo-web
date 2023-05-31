@@ -19,7 +19,7 @@ import { FornecedorActions } from "../../actions/FornecedorActions";
 import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, fornecedorSelector, fornecedorSelectorNome } from "../../states/FornecedorState";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ClienteActions } from "../../actions/ClienteActions";
-import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelectorNome } from "../../states/ClienteState";
+import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelector, clienteSelectorNome } from "../../states/ClienteState";
 import { ProdutoForm } from "./ProdutoForm";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
@@ -27,7 +27,7 @@ import { CardGeneric } from "../../components/Card/CardGeneric";
 import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
 import { getData } from "../../components/helpers/getDataHora";
 import { EntradaActions } from "../../actions/EntradaActions";
-import { entradaPageState, entradaRowsPerPageState, entradaSearchAtom, entradaSelectorCodigo } from "../../states/EntradaState";
+import { entradaFilterAtom, entradaPageState, entradaRowsPerPageState, entradaSearchAtom, entradaSelectorCodigo, entradaSelectorFilter } from "../../states/EntradaState";
 import { decimalDigitsMask } from "../../components/helpers/masks";
 
 export interface EntradaForm {
@@ -39,6 +39,8 @@ export interface EntradaForm {
     produtos: any
 }
 
+const dataAtual = getData()
+
 export const Entrada = () => {
 
 
@@ -46,7 +48,6 @@ export const Entrada = () => {
 
     const [produtos, setProdutos] = useState<any>([])
 
-    const dataAtual = getData()
 
     const [flagprodutosSalvos, setFlagProdutosSalvos] = useState<any>(false)
 
@@ -171,7 +172,7 @@ export const Entrada = () => {
                             <Grid container
                                 direction="row" spacing={1.5}>
                                 <Grid item xs={12} md={12} lg={12} xl={12} sx={{ margin: 3.0 }}>
-                                    <TableEntradas reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} entradaSelecionada={entradaSelecionada} setEntradaSelecionada={setEntradaSelecionada} atomFilter={entradaSearchAtom} selector={entradaSelectorCodigo} />
+                                    <TableEntradas reload={reload} setReload={setReload} setCardPesquisa={setCardPesquisar} entradaSelecionada={entradaSelecionada} setEntradaSelecionada={setEntradaSelecionada} atomFilter={entradaFilterAtom} selector={entradaSelectorFilter} />
                                 </Grid>
                             </Grid>
 
@@ -225,8 +226,15 @@ interface ITableEntradas {
     setReload: any
 }
 
+interface ITableEntradasForm {
+    fornecedor: any,
+    dt_inicial: string,
+    dt_final: string
+}
+
 const TableEntradas = (props: ITableEntradas) => {
 
+    const [objFilters, setObjFilters] = useState<any>({})
 
     const columns = [
         {
@@ -275,8 +283,44 @@ const TableEntradas = (props: ITableEntradas) => {
         },
     ]
 
+    const { setValue, control, getValues } = useForm<ITableEntradasForm>()
+
+    const onSubmitFiltrar = (data: any) => {
+        console.log(data)
+        setObjFilters({
+            fornecedor: data.fornecedor?._id,
+            dt_inicial: data.dt_inicial,
+            dt_final: data.dt_final
+        })
+    }
+
     return (
-        <TableGeneric atomPage={entradaPageState} atomRowPerPage={entradaRowsPerPageState} setCardPesquisa={props.setCardPesquisa} reload={props.reload} setReload={props.setReload} tabela="entradas" title='Pesquisar' setItemEdit={props.setEntradaSelecionada} itemEdit={props.entradaSelecionada} atomFilter={props.atomFilter} atomSelectorList={props.selector} columns={columns} widthTxtField={"200px"} enableSearch={true} enablePagination={false} height={400} />
+        <>
+            <form>
+                <CardGeneric title="Filtrar">
+                    <Grid container direction={'row'} spacing={1.5}>
+                        <Grid item xs={12} md={6} lg={6} xl={8} >
+                            <GetAutoCompleteForm label={"Fornecedor"} name={"fornecedor"} control={control} selector={fornecedorSelector} optionLabel={"nome"} />
+                        </Grid>
+                        <Grid item xs={6} md={3} lg={3} xl={2} >
+                            <TxtFieldForm name={"dt_inicial"} control={control} label={"Data Inicial"} type={'date'}/>
+                        </Grid>
+                        <Grid item xs={6} md={3} lg={3} xl={2} >
+                            <TxtFieldForm name={"dt_final"} control={control} label={"Data Final"} type={'date'}/>
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12} xl={12} >
+                            <ButtonGeneric title={"Filtrar"} fullWidth typeIcon="filtrar" height="55px" type="button" onClick={() => onSubmitFiltrar(getValues())} />
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={612} xl={12}>
+                            {/* <TableGeneric atomPage={vendaPageState} atomRowPerPage={vendaRowsPerPageState} setCardPesquisa={props.setCardPesquisa} reload={props.reload} setReload={props.setReload} tabela="vendas" title='Pesquisar' setItemEdit={props.setVendaSelecionada} itemEdit={props.vendaSelecionada} atomFilter={props.atomFilter} atomSelectorList={props.selector} columns={columns} widthTxtField={"200px"} enableSearch={false} enablePagination={false} height={400} enableCustomSearch={true} objFilters={objFilters} /> */}
+                            <TableGeneric atomPage={entradaPageState} atomRowPerPage={entradaRowsPerPageState} setCardPesquisa={props.setCardPesquisa} reload={props.reload} setReload={props.setReload} tabela="entradas" title='Pesquisar' setItemEdit={props.setEntradaSelecionada} itemEdit={props.entradaSelecionada} atomFilter={props.atomFilter} atomSelectorList={props.selector} columns={columns} widthTxtField={"200px"} enableSearch={false} enableCustomSearch={true} enablePagination={false} height={400} objFilters={objFilters} />
+                        </Grid>
+                    </Grid>
+
+                </CardGeneric>
+            </form>
+        </>
+
     )
 }
 
