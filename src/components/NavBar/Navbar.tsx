@@ -35,6 +35,8 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PaidIcon from '@mui/icons-material/Paid';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
+import LOGO_AZUL from '../../imgs/logo_azul.png'
+import LOGO_BRANCA from '../../imgs/logo_branca.png'
 
 function Navbar() {
 
@@ -95,7 +97,7 @@ function Navbar() {
         setOpenAninhadaVendas(!openAninhadaVendas)
     }
 
-    const handleClickProdutos= () => {
+    const handleClickProdutos = () => {
         setOpenAninhadaProdutos(!openAninhadaProdutos)
     }
 
@@ -124,7 +126,7 @@ function Navbar() {
             </ItemList>
         )
     }
-    
+
 
     const listItemEstoque = () => {
 
@@ -186,8 +188,8 @@ function Navbar() {
         return (
             <Box sx={{ padding: '10px 16px 5px', borderTop: '1px solid white' }}>
                 <Grid container direction={'row'} sx={{}}>
-                    <Box sx={{ width: '22%', backgroundColor: 'transparent', marginRight: 3, marginLeft: 1 , borderRadius: '50%'}}>
-                     <img src={`data:image/jpeg;base64,${usuario.foto}`} alt="perfil" width={65} height={65} style={{borderRadius: '50%'}}/>
+                    <Box sx={{ width: '22%', backgroundColor: 'transparent', marginRight: 3, marginLeft: 1, borderRadius: '50%' }}>
+                        <img src={`data:image/jpeg;base64,${usuario.foto}`} alt="perfil" width={65} height={65} style={{ borderRadius: '50%' }} />
                     </Box>
                     <Box sx={{ width: '65%', paddingTop: 1 }}>
                         <Typography sx={{
@@ -195,7 +197,7 @@ function Navbar() {
                             fontWeight: 'bold',
                             fontSize: '18px'
                         }} color={'#FFD525'}>
-                            {usuario?.nome} 
+                            {usuario?.nome}
                         </Typography>
                         <Typography sx={{
                             fontFamily: 'Kanit, sans-serif;', fontSize: '15px',
@@ -210,21 +212,21 @@ function Navbar() {
 
     return (
         <Fragment key='left'>
-            <Box sx={{ display: 'flex'}}>
+            <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
                 <AppBar position="static" sx={{ bgcolor: '#006666', width: '100%', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                     <Toolbar>
                         <Box display='flex' flexGrow={150}>
-                            <IconButton sx={{outline: 'none !important;;', mr: 2}} edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(!drawerOpen)}>
-                                <MenuIcon/>
+                            <IconButton sx={{ outline: 'none !important;;', mr: 2 }} edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(!drawerOpen)}>
+                                <MenuIcon />
                             </IconButton>
                         </Box>
-                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontFamily: 'Kanit, sans-serif;', fontWeight: 'bold' }}>
-                            {usuario?.nome} 
-                        </Typography>
+                        {/* <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontFamily: 'Kanit, sans-serif;', fontWeight: 'bold', fontSize: '23px', letterSpacing: '2px' }}>
+                            GERINDO+
+                        </Typography> */}
                         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}></Typography>
-                        <Tooltip title="Account settings"><IconButton sx={{outline: 'none !important;;'}} edge="end" color="inherit" aria-label="menu" onClick={handleClick}>
-                            {/* <img src={logo} alt="logo" width={50} height={50} /> */}
+                        <Tooltip title="Account settings"><IconButton sx={{ outline: 'none !important;;' }} edge="end" color="inherit" aria-label="menu" onClick={handleClick}>
+                            <img src={LOGO_BRANCA} alt="logo" width={40} height={40} />
                         </IconButton></Tooltip>
                         <Menu
                             anchorEl={anchorEl}
@@ -280,7 +282,7 @@ function Navbar() {
                                 </ListItemIcon>
                                 Settings
                             </MenuItem>
-                            <MenuItem onClick={() => {window.location.href = 'http://localhost:3000/sair'}}>
+                            <MenuItem onClick={() => { window.location.href = 'http://localhost:3000/sair' }}>
                                 <ListItemIcon>
                                     <Logout fontSize="small" style={{ color: "red" }} />
                                 </ListItemIcon>
@@ -320,11 +322,11 @@ function Navbar() {
                                 borderRadius: '50px'
                             }} />
                     }>
-                        <Box sx={{ paddingLeft: 2, paddingTop: 3, paddingBottom: 2 }}>
+                        {/* <Box sx={{ paddingLeft: 2, paddingTop: 3, paddingBottom: 2 }}>
                             <Grid container direction={'row'}>
                                 <Grid item xs={9.5} md={10} lg={10} xl={10}>
-                                    <Box sx={{display: 'inline-block', marginRight: 1.5}}>
-                                        {/* <img src={logo} alt="logo" width={40} height={40} /> */}
+                                    <Box sx={{ display: 'inline-block', marginRight: 1.5,  }}>
+                                        <img src={LOGO_BRANCA} alt="logo" width={40} height={40} />
                                     </Box>
                                     <Box sx={{display: 'inline-block'}}>
                                         <Typography sx={{fontFamily: 'Kanit, sans-serif;', fontWeight: 'bold', fontSize: '18px'}} color={'white'}>
@@ -336,6 +338,25 @@ function Navbar() {
                                     <Box>
                                         <IconButton  sx={{outline: 'none !important;;'}} onClick={() => {setDrawerOpen(false)}}>
                                             <ArrowForwardIcon sx={{color: 'white'}} />
+                                        </IconButton>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Box> */}
+                        <Box sx={{ paddingLeft: 2, paddingTop: 3, paddingBottom: 2 }}>
+                            <Grid container direction="row" alignItems="center">
+                                <Grid item xs={10} md={10} lg={10} xl={10} sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box sx={{ display: 'inline-block', marginRight: 1.5 }}>
+                                        <img src={LOGO_BRANCA} alt="logo" width={40} height={40} />
+                                    </Box>
+                                    <Box sx={{ display: 'inline-block', fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', fontSize: '19px', color: 'white', letterSpacing: '1.5px', marginBottom: '3px' }}>
+                                        GERINDO+
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={2} md={2} lg={2} xl={2}>
+                                    <Box>
+                                        <IconButton sx={{ outline: 'none !important' }} onClick={() => { setDrawerOpen(false) }}>
+                                            <ArrowForwardIcon sx={{ color: 'white' }} />
                                         </IconButton>
                                     </Box>
                                 </Grid>
@@ -358,28 +379,28 @@ function Navbar() {
                         </Box>
                         {ListMenuDependencias()}
                     </Scrollbars>
-                    <Box sx={{backgroundColor: '#00b6b6', height: '55px', paddingTop: '5px'}}>
+                    <Box sx={{ backgroundColor: '#00b6b6', height: '55px', paddingTop: '5px' }}>
                         <Grid container direction={'row'}>
                             <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
                             </Grid>
                             <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
-                                <IconButton  sx={{}} onClick={() => {window.location.href = 'http://localhost:3000/pagina_inicial'}}>
-                                    <NotificationsIcon sx={{color: '#006666'}} />
+                                <IconButton sx={{}} onClick={() => { window.location.href = 'http://localhost:3000/pagina_inicial' }}>
+                                    <NotificationsIcon sx={{ color: '#006666' }} />
                                 </IconButton>
                             </Grid>
                             <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
-                                <IconButton  sx={{}} onClick={() => {}}>
-                                    <EmailIcon sx={{color: '#006666'}} />
+                                <IconButton sx={{}} onClick={() => { }}>
+                                    <EmailIcon sx={{ color: '#006666' }} />
                                 </IconButton>
                             </Grid>
                             <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
-                                <IconButton  sx={{}} onClick={() => {window.location.href = 'http://localhost:3000/configurar_usuario'}}>
-                                    <AccountCircleIcon sx={{color: '#006666'}} />
+                                <IconButton sx={{}} onClick={() => { window.location.href = 'http://localhost:3000/configurar_usuario' }}>
+                                    <AccountCircleIcon sx={{ color: '#006666' }} />
                                 </IconButton>
                             </Grid>
                             <Grid item xs={2} md={2} lg={2} xl={2}>
-                                <IconButton  sx={{  }} onClick={() => {window.location.href = 'http://localhost:3000/sair'}}>
-                                    <LogoutIcon sx={{color: '#c1272d'}} />
+                                <IconButton sx={{}} onClick={() => { window.location.href = 'http://localhost:3000/sair' }}>
+                                    <LogoutIcon sx={{ color: '#c1272d' }} />
                                 </IconButton>
                             </Grid>
                         </Grid>

@@ -11,6 +11,9 @@ import * as yup from 'yup'
 import { useState } from "react";
 import { AlertError } from "../../components/helpers/AlertError";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
+import LOGO_AZUL from '../../imgs/logo_azul.png'
+import LOGO_BRANCA from '../../imgs/logo_branca.png'
+
 
 
 interface ILogin {
@@ -59,9 +62,10 @@ export const Login = () => {
 
                             </Grid>
                             <Grid item xs={12} md={6} lg={5} xl={4}>
-                                <Card sx={{ margin: 5, marginTop: 15, marginBottom: 2, backgroundColor: 'transparent', borderRadius: '10px' }}>
-                                    <CardContent>
-                                        <TitleCardGeneric title="Login" align="center" />
+                                <Box sx={{display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: 10}}>
+                                    <img src={LOGO_BRANCA} alt="LOGO" style={{width: '260px', height: '280px'}}/>
+                                </Box>
+                                <Box sx={{ margin: 5, marginTop: 5, marginBottom: 2, backgroundColor: 'transparent', borderRadius: '10px' }}>
                                         {hasError && <Grid item sx={{ marginBottom: 4 }}>
                                             <AlertError title={"Atenção"} type={'warning'} style={'filled'} msgError={msgError} />
                                         </Grid>}
@@ -76,10 +80,11 @@ export const Login = () => {
                                                 <ButtonGeneric title={"ENTRAR"} typeIcon="entrar" fullWidth />
                                             </Grid>
                                         </Grid>
-                                    </CardContent>
-                                </Card>
+                                </Box>
                                 <Box sx={{textAlign: 'center'}}>
                                     <Typography fontFamily= {'Kanit, sans-serif;'} fontWeight={'bold'} sx={{marginBottom: 2}}>Ainda não se registrou?</Typography>
+                                </Box>
+                                <Box sx={{display: 'flex', justifyContent: 'center', alignContent: 'center'}}>
                                     <ButtonGeneric title={"CRIAR CONTA"} typeIcon="entrar" backgroundColor={"#f5f5f5"} color={"#006666"} backgroundColorHover={'#008584'} colorHover='#f5f5f5' width="300px" onClick={() => {window.location.href = 'http://localhost:3000/cadastro'}} type="button"/>
                                 </Box>
                             </Grid>
