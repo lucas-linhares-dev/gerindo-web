@@ -12,6 +12,9 @@ import { Entrada } from "../pages/Entrada/EntradaForm"
 import { Venda } from "../pages/Venda/Venda"
 import Navbar from "../components/NavBar/Navbar"
 import { ConfigurarUsuario } from "../pages/Usuario/ConfigurarUsuario"
+import DialogProviderResolve from "../components/Dialogs/DialogProviderResolve"
+import DialogProviderAlert from "../components/Dialogs/DialogProviderAlert"
+import DialogProviderError from "../components/Dialogs/DialogProviderError"
 
 export const AppRoutes = () => {
 
@@ -21,20 +24,27 @@ export const AppRoutes = () => {
     return(
         <BrowserRouter>
             { usuario && <Navbar />}
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/configurar_usuario" element={<ConfigurarUsuario />} />
-                <Route path="/pagina_inicial" element={<PaginaInicial />} />
-                <Route path="/cadastro" element={<Cadastro />} />
-                <Route path="/categoria" element={<Categoria />} />
-                <Route path="/produto" element={<Produto />} />
-                <Route path="/fornecedor" element={<Fornecedor />} />
-                <Route path="/cliente" element={<Cliente />} />
-                <Route path="/formaPagamento" element={<FormaPagamento />} />
-                <Route path="/entrada" element={<Entrada />} />
-                <Route path="/venda" element={<Venda />} />
-                <Route path="/sair" element={<Sair />}/>
-            </Routes>
+            <DialogProviderResolve>
+            <DialogProviderAlert>
+            <DialogProviderError>
+                <Routes>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/configurar_usuario" element={<ConfigurarUsuario />} />
+                    <Route path="/pagina_inicial" element={<PaginaInicial />} />
+                    <Route path="/cadastro" element={<Cadastro />} />
+                    <Route path="/categoria" element={<Categoria />} />
+                    <Route path="/produto" element={<Produto />} />
+                    <Route path="/fornecedor" element={<Fornecedor />} />
+                    <Route path="/cliente" element={<Cliente />} />
+                    <Route path="/formaPagamento" element={<FormaPagamento />} />
+                    <Route path="/entrada" element={<Entrada />} />
+                    <Route path="/venda" element={<Venda />} />
+                    <Route path="/sair" element={<Sair />}/>
+                </Routes>
+            </DialogProviderError>
+            </DialogProviderAlert>
+            </DialogProviderResolve>
+            
         </BrowserRouter>
     )
 }

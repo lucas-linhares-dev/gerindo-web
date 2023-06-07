@@ -13,6 +13,7 @@ import { useState } from "react";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import LOGO_AZUL from '../../imgs/logo_azul.png'
 import LOGO_BRANCA from '../../imgs/logo_branca.png'
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
 
 
 interface CadastroForm {
@@ -28,6 +29,8 @@ export const Cadastro = () => {
     const usuarioActions = UsuarioActions()
 
     const [hasError, setHasError] = useState<boolean>(false)
+
+    const showDialogConfirmed = useAlertDialog()
 
     const validationSchema = yup.object().shape({
         nome: yup.string()
@@ -52,7 +55,8 @@ export const Cadastro = () => {
         if (data.senha === data.senhaConfirm) {
             usuarioActions.usuarioInsert(data).then((res: any) => {
                 if (res.status === 200) {
-                    OpenModal(`Seja bem vindo ${res.data.nome}!`, () => window.location.href = 'http://localhost:3000/')
+                    showDialogConfirmed(`Seja bem vindo ${res.data.nome}!`, "success")
+                    window.location.href = 'http://localhost:3000/'
                 }
                 else {
                     console.log("ERROS BACK END")

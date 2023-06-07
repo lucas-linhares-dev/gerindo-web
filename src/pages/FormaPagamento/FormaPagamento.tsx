@@ -18,6 +18,8 @@ import { FormaPagamentoActions } from "../../actions/FormaPagamentoActions";
 import { formaPagamentoPageState, formaPagamentoRowsPerPageState, formaPagamentoSearchAtom, formaPagamentoSelectorNome } from "../../states/FormaPagamentoState";
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
 
 interface FormasPagamentoForm {
     nome: string,
@@ -35,6 +37,9 @@ export const FormaPagamento = () => {
     const [reload, setReload] = useState<any>(false)
 
     const [cardPesquisar, setCardPesquisar] = useState<boolean>(false)
+
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
 
     const initialValues = {
         nome: '',
@@ -55,11 +60,11 @@ export const FormaPagamento = () => {
 
     const onSubmitFormaPagamento = async (data: any) => {
         if (formaPagamentoSelecionada === null) {
-            const confirm = await OpenModalConfirm("Cadastrar forma de pagamento?")
+            const confirm = await showDialogResolve({title: '', message: 'Cadastrar forma de pagamento?'})
             if (confirm) {
                 formaPagamentoActions.formaPagamentoInsert(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Forma de pagamento cadastrada com sucesso!`, () => { })
+                        showDialogConfirmed("Forma de pagamento cadastrada com sucesso!", "success")
                         reset({ ...initialValues })
                     }
                     else {
@@ -69,11 +74,11 @@ export const FormaPagamento = () => {
             }
         }
         else {
-            const confirm = await OpenModalConfirm("Alterar forma de pagamento?")
+            const confirm = await showDialogResolve({title: '', message: 'Alterar forma de pagamento?'})
             if (confirm) {
                 formaPagamentoActions.formaPagamentoUpdate(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal("Forma de pagamento alterada com sucesso!", () => { })
+                        showDialogConfirmed("Forma de pagamento alterada com sucesso!", "success")
                         setFormaPagamentoSelecionada(res.data)
                         setReload(true)
                     }
@@ -86,11 +91,11 @@ export const FormaPagamento = () => {
     }
 
     const excluirFormaPagamento = async () => {
-        const confirm = await OpenModalConfirm("Excluir forma de pagamento?")
+        const confirm = await showDialogResolve({title: '', message: 'Excluir forma de pagamento?'})
         if (confirm) {
             const res = await formaPagamentoActions.formaPagamentoExcluir(formaPagamentoSelecionada._id)
             if (res?.status === 200) {
-                OpenModal("Forma de pagamento excluida com sucesso!", () => { })
+                showDialogConfirmed("Forma de pagamento excluida com sucesso!", "success")
                 setReload(true)
                 setFormaPagamentoSelecionada(null)
             }
@@ -103,6 +108,7 @@ export const FormaPagamento = () => {
     useEffect(() => {
         if (formaPagamentoSelecionada != null) {
             reset(formaPagamentoSelecionada)
+            window.scrollTo(0, 500)
         } else {
             reset({ ...initialValues })
         }

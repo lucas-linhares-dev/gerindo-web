@@ -21,6 +21,8 @@ import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric"
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { InputImage } from "../../components/Input/InputImage";
 import { validateEAN13, validateEAN14, validateEAN8 } from "../../components/helpers/validateEAN";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
 
 interface ProdutoForm {
     nome: string,
@@ -44,6 +46,9 @@ export const Produto = () => {
     const [reload, setReload] = useState<any>(false)
 
     const [produtoSelecionado, setProdutoSelecionado] = useState<any>(null)
+
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
 
     const initialValues = useMemo(() => {
         return {
@@ -97,11 +102,11 @@ export const Produto = () => {
     const onSubmitProduto = async (data: any) => {
         console.log(data)
         if (produtoSelecionado === null) {
-            const confirm = await OpenModalConfirm("Cadastrar produto?")
+            const confirm = await showDialogResolve({title: '', message: 'Cadastrar produto?'})
             if (confirm) {
                 produtoActions.produtoInsert(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Produto cadastrado com sucesso!`, () => { })
+                        showDialogConfirmed("Produto cadastrado com sucesso!", "success")
                         reset({ ...initialValues })
                         setReload(true)
                     }
@@ -112,13 +117,13 @@ export const Produto = () => {
             }
         }
         else {
-            const confirm = await OpenModalConfirm("Alterar produto?")
+            const confirm = await showDialogResolve({title: '', message: 'Alterar produto?'})
             if (confirm) {
                 console.log(data)
                 produtoActions.produtoUpdate(data).then((res: any) => {
                     if (res.status === 200) {
                         console.log(res.data)
-                        OpenModal("Produto alterado com sucesso!", () => { })
+                        showDialogConfirmed("Produto alterado com sucesso!", "success")
                         setProdutoSelecionado(res.data)
                         setReload(true)
                     }
@@ -131,11 +136,11 @@ export const Produto = () => {
     }
 
     const excluirProduto = async () => {
-        const confirm = await OpenModalConfirm("Excluir produto?")
+        const confirm = await showDialogResolve({title: '', message: 'Excluir produto?'})
         if (confirm) {
             const res = await produtoActions.produtoExcluir(produtoSelecionado._id)
             if (res?.status === 200) {
-                OpenModal("Produto excluido com sucesso!", () => { })
+                showDialogConfirmed("Produto excluido com sucesso!", "success")
                 setReload(true)
                 setProdutoSelecionado(null)
             }

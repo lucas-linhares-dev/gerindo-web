@@ -1,7 +1,6 @@
 
 import { Box, Card, CardContent, Collapse, Grid, Icon, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
@@ -14,7 +13,6 @@ import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { ProdutoActions } from "../../actions/ProdutoActions";
-import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { FornecedorActions } from "../../actions/FornecedorActions";
 import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, fornecedorSelector, fornecedorSelectorNome } from "../../states/FornecedorState";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -29,6 +27,9 @@ import { getData } from "../../components/helpers/getDataHora";
 import { EntradaActions } from "../../actions/EntradaActions";
 import { entradaFilterAtom, entradaPageState, entradaRowsPerPageState, entradaSearchAtom, entradaSelectorCodigo, entradaSelectorFilter } from "../../states/EntradaState";
 import { decimalDigitsMask } from "../../components/helpers/masks";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
+import { useErrorDialog } from "../../components/Dialogs/DialogProviderError";
 
 export interface EntradaForm {
     codigo: string,
@@ -47,16 +48,13 @@ export const Entrada = () => {
     const entradaActions = EntradaActions()
 
     const [produtos, setProdutos] = useState<any>([])
-
-
     const [flagprodutosSalvos, setFlagProdutosSalvos] = useState<any>(false)
-
     const [entradaSelecionada, setEntradaSelecionada] = useState<any>(null)
-
     const [reload, setReload] = useState<any>(false)
-
     const [resetProdutos, setResetProdutos] = useState<boolean>(false)
 
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
 
     // const [hasError, setHasError] = useState<boolean>(false)
 
@@ -90,13 +88,13 @@ export const Entrada = () => {
 
     const onSubmitEntrada = async (data: any) => {
         if (!entradaSelecionada) {
-            const confirm = await OpenModalConfirm("Cadastrar entrada?")
+            const confirm = await showDialogResolve({title: '', message: 'Cadastrar entrada?'})
             if (confirm) {
                 data.produtos = produtos.map((produto: any) => { return { cod_ref: produto.cod_ref, quantidade: produto.quantidade, nome: produto.nome } })
 
                 entradaActions.entradaInsert(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Entrada cadastrada com sucesso!`, () => { })
+                        showDialogConfirmed("Entrada cadastrada com sucesso!", "success")
                         reset({ ...initialValues })
                         setResetProdutos(true)
                     }
@@ -107,11 +105,11 @@ export const Entrada = () => {
             }
         }
         else {
-            const confirm = await OpenModalConfirm("Alterar entrada?")
+            const confirm = await showDialogResolve({title: '', message: 'Alterar entrada?'})
             if (confirm) {
                 entradaActions.entradaUpdate(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Entrada alterada com sucesso!`, () => { })
+                        showDialogConfirmed("Entrada alterada com sucesso!", "success")
                         setReload((prev: any) => !prev)
 
                     }
@@ -128,6 +126,7 @@ export const Entrada = () => {
     useEffect(() => {
         if (entradaSelecionada != null) {
             reset(entradaSelecionada)
+            window.scrollTo(0, 1000)
         } else {
             reset({ ...initialValues })
         }

@@ -2,7 +2,6 @@
 import { Box, Button, Card, CardContent, Grid, IconButton, TextField, Tooltip, Typography, createTheme } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { UsuarioActions } from "../../actions/UsuarioActions";
-import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
@@ -14,8 +13,9 @@ import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric"
 import SearchIcon from '@mui/icons-material/Search';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
-import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { InputImage } from "../../components/Input/InputImage";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
 
 
 
@@ -35,6 +35,9 @@ export const ConfigurarUsuario = () => {
     const usuarioActions = UsuarioActions()
 
     const [hasError, setHasError] = useState<boolean>(false)
+
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
 
     const initialValues = useMemo(() => {
         return {
@@ -61,12 +64,13 @@ export const ConfigurarUsuario = () => {
 
     const onSubmitCadastro = async (data: any) => {
         console.log(data)
-        const confirm = await OpenModalConfirm("Salvar alterações?")
+        const confirm = await showDialogResolve({title: '', message: 'Salvar alterações?'})
         if(confirm){
             usuarioActions.usuarioUpdate(data).then((res: any) => {
                 if (res.status === 200) {
                     localStorage.setItem('usuarioLogado', JSON.stringify(res.data));
-                    OpenModal(`Usuário atualizado com sucesso!`, () => window.location.href = 'http://localhost:3000/pagina_inicial')
+                    showDialogConfirmed("Usuário atualizado com sucesso!", "success")
+                    window.location.href = 'http://localhost:3000/pagina_inicial'
                 }
                 else {
                     console.log("ERROS BACK END")

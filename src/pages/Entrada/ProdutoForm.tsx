@@ -1,7 +1,6 @@
 
 import { Box, Button, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { OpenModal } from "../../components/helpers/OpenModal";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,7 +11,6 @@ import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { ProdutoActions } from "../../actions/ProdutoActions";
-import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { produtoPageState, produtoRowsPerPageState, produtoSearchAtom, produtoSelectorNome } from "../../states/ProdutoState";
 import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
 import { fornecedorSelector } from "../../states/FornecedorState";
@@ -21,6 +19,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import { executeScroll } from "../../components/helpers/ExecuteScroll";
 import { CardGeneric } from "../../components/Card/CardGeneric";
+import { useErrorDialog } from "../../components/Dialogs/DialogProviderError";
 
 
 interface ProdutoForm {
@@ -47,6 +46,7 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
 
     const produtoActions = ProdutoActions()
 
+    const showDialogError = useErrorDialog()
 
     const cardProdutosRef = useRef<any>(null);
 
@@ -87,12 +87,18 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
         if (produtoSelecionado !== null ) {
             if(!produtos.some((produto: any) => produto._id === getValues('_id'))){
                 if(getValues('quantidade') === undefined){
-                    OpenModal(`Insira uma quantidade!`, () => { }, 2000)
+                    showDialogError({
+                        message: 'Insira uma quantidade!',
+                        title: undefined
+                    })
                 }
                 else{
                     setValue('quantidade', Number(getValues('quantidade')))
                     if(getValues('quantidade') < 1){
-                        OpenModal(`Insira uma quantidade válida!`, () => { }, 2000)
+                        showDialogError({
+                            message: 'Insira uma quantidade válida!',
+                            title: undefined
+                        })
                     }
                     else{
                         setProdutos((prev: any) => {
@@ -106,7 +112,10 @@ export const ProdutoForm = (props: ProdutoFormProps) => {
                 
             }
             else{
-                OpenModal(`Este produto já foi inserido!`, () => { }, 2000)
+                showDialogError({
+                    message: 'Este produto já foi inserido!',
+                    title: undefined
+                })
             }
         } else console.log("Nao enviou")
     }

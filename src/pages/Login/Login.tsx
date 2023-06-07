@@ -13,6 +13,7 @@ import { AlertError } from "../../components/helpers/AlertError";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import LOGO_AZUL from '../../imgs/logo_azul.png'
 import LOGO_BRANCA from '../../imgs/logo_branca.png'
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
 
 
 
@@ -26,6 +27,8 @@ export const Login = () => {
 
     const [hasError, setHasError] = useState<boolean>(false)
     const [msgError, setMsgError] = useState<any>(false)
+
+    const showDialogConfirmed = useAlertDialog()
 
     const validationSchema = yup.object().shape({
         email: yup.string()
@@ -43,7 +46,8 @@ export const Login = () => {
         usuarioActions.usuarioAuth(data).then((res: any) => {
             if (res.status === 200) {
                 localStorage.setItem('usuarioLogado', JSON.stringify(res.data));
-                OpenModal(`Bom tê-lo de volta ${res.data.nome}!`, () => window.location.href = 'http://localhost:3000/pagina_inicial')
+                showDialogConfirmed(`Bom tê-lo de volta ${res.data.nome}!`, "success")
+                window.location.href = 'http://localhost:3000/pagina_inicial'
             }
             else {
                 setMsgError(res.response.data.msg)

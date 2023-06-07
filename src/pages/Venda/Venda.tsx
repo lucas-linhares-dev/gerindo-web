@@ -33,6 +33,8 @@ import { ProdutoForm } from "../Entrada/ProdutoForm";
 import { vendaFilterAtom, vendaPageState, vendaRowsPerPageState, vendaSearchAtom, vendaSelectorCodigo, vendaSelectorFilter } from "../../states/VendaState";
 import { VendaActions } from "../../actions/VendaActions";
 import { decimalDigitsMask } from "../../components/helpers/masks";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
 
 
 export interface IVenda {
@@ -67,6 +69,8 @@ export const Venda = () => {
 
     const [cardPesquisar, setCardPesquisar] = useState<boolean>(false)
 
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
 
     const initialValues = useMemo(() => {
         return {
@@ -96,13 +100,13 @@ export const Venda = () => {
 
     const onSubmitVenda = async (data: any) => {
         if (!vendaSelecionada) {
-            const confirm = await OpenModalConfirm("Cadastrar venda?")
+            const confirm = await showDialogResolve({title: '', message: 'Cadastrar venda?'})
             if (confirm) {
                 data.produtos = produtos.map((produto: any) => { return { cod_ref: produto.cod_ref, quantidade: produto.quantidade, nome: produto.nome } })
 
                 vendaActions.vendaInsert(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Venda cadastrada com sucesso!`, () => { })
+                        showDialogConfirmed("Venda cadastrada com sucesso!", "success")
                         reset({ ...initialValues })
                         setResetProdutos(true)
                     }
@@ -113,11 +117,11 @@ export const Venda = () => {
             }
         }
         else {
-            const confirm = await OpenModalConfirm("Alterar venda?")
+            const confirm = await showDialogResolve({title: '', message: 'Alterar venda?'})
             if (confirm) {
                 vendaActions.vendaUpdate(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Venda alterada com sucesso!`, () => { })
+                        showDialogConfirmed("Venda alterada com sucesso!", "success")
                         setReload((prev: any) => !prev)
 
                     }
@@ -134,6 +138,7 @@ export const Venda = () => {
     useEffect(() => {
         if (vendaSelecionada != null) {
             reset(vendaSelecionada)
+            window.scrollTo(0, 1000)
         } else {
             reset({ ...initialValues })
         }

@@ -24,6 +24,8 @@ import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSe
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 import { useMunicipiosActions } from "../../actions/municipiosAction";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
 
 interface ClienteForm {
     nome: string,
@@ -41,15 +43,16 @@ interface ClienteForm {
 export const Cliente = () => {
 
     const clienteActions = ClienteActions()
-
     const [clienteSelecionado, setClienteSelecionado] = useState<any>(null)
 
     const [reload, setReload] = useState<any>(false)
 
-
     // const [hasError, setHasError] = useState<boolean>(false)
 
     const [cardPesquisar, setCardPesquisar] = useState<boolean>(false)
+
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
 
     const initialValues = {
         nome: '',
@@ -74,11 +77,11 @@ export const Cliente = () => {
 
     const onSubmitCliente = async (data: any) => {
         if (clienteSelecionado === null) {
-            const confirm = await OpenModalConfirm("Cadastrar cliente?")
+            const confirm = await showDialogResolve({title: '', message: 'Cadastrar cliente?'})
             if (confirm) {
                 clienteActions.clienteInsert(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Cliente cadastrado com sucesso!`, () => { })
+                        showDialogConfirmed("Cliente cadastrado com sucesso!", "success")
                         reset({ ...initialValues })
                     }
                     else {
@@ -88,11 +91,11 @@ export const Cliente = () => {
             }
         }
         else {
-            const confirm = await OpenModalConfirm("Alterar cliente?")
+            const confirm = await showDialogResolve({title: '', message: 'Alterar cliente?'})
             if (confirm) {
                 clienteActions.clienteUpdate(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal("Cliente alterado com sucesso!", () => { })
+                        showDialogConfirmed("Cliente alterado com sucesso!", "success")
                         setClienteSelecionado(res.data)
                         setReload(true)
                     }
@@ -105,11 +108,11 @@ export const Cliente = () => {
     }
 
     const excluirCliente = async () => {
-        const confirm = await OpenModalConfirm("Excluir Cliente?")
+        const confirm = await showDialogResolve({title: '', message: 'Excluir cliente?'})
         if (confirm) {
             const res = await clienteActions.clienteExcluir(clienteSelecionado._id)
             if (res?.status === 200) {
-                OpenModal("Cliente excluido com sucesso!", () => { })
+                showDialogConfirmed("Cliente excluido com sucesso!", "success")
                 setReload(true)
                 setClienteSelecionado(null)
             }
@@ -122,6 +125,7 @@ export const Cliente = () => {
     useEffect(() => {
         if (clienteSelecionado != null) {
             reset(clienteSelecionado)
+            window.scrollTo(0, 500)
         } else {
             reset({ ...initialValues })
         }
@@ -192,7 +196,7 @@ export const Cliente = () => {
                                         <TxtFieldForm name={"telefone"} control={control} label={"Telefone"} mask={'telefone'} error={errors.telefone?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={3} lg={2.5} xl={1.5}>
-                                        <TxtFieldForm name={"cpf"} control={control} label={"CPF"} textAlign={'right'} mask="cnpj" error={errors.cpf?.message} />
+                                        <TxtFieldForm name={"cpf"} control={control} label={"CPF"} textAlign={'right'} mask="cpf" error={errors.cpf?.message} />
                                     </Grid>
                                     
                                 </Grid>

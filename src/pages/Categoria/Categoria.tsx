@@ -1,7 +1,6 @@
 
 import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { OpenModal } from "../../components/helpers/OpenModal";
 import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
@@ -13,11 +12,12 @@ import { CategoriaActions } from "../../actions/CategoriaActions";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
 import { categoriaPageState, categoriaRowsPerPageState, categoriaSearchAtom, categoriaSelectorNome } from "../../states/CategoriaState";
 import { useRecoilState } from "recoil";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 import { CardGeneric } from "../../components/Card/CardGeneric";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
 
 
 interface CategoriaForm {
@@ -38,6 +38,9 @@ export const Categoria = () => {
 
     const [cardPesquisar, setCardPesquisar] = useState<boolean>(false)
 
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
+
     const initialValues = {
         nome: '',
         descricao: ''
@@ -57,11 +60,11 @@ export const Categoria = () => {
 
     const onSubmitCategoria = async (data: any) => {
         if (categoriaSelecionada === null) {
-            const confirm = await OpenModalConfirm("Cadastrar categoria?")
+            const confirm = await showDialogResolve({title: '', message: 'Cadastrar categoria?'})
             if (confirm) {
                 categoriaActions.categoriaInsert(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Categoria cadastrada com sucesso!`, () => { })
+                        showDialogConfirmed("Categoria cadastrada com sucesso!", "success")
                         reset({ ...initialValues })
                     }
                     else {
@@ -71,11 +74,11 @@ export const Categoria = () => {
             }
         }
         else {
-            const confirm = await OpenModalConfirm("Alterar categoria?")
+            const confirm = await showDialogResolve({title: '', message: 'Alterar categoria?'})
             if (confirm) {
                 categoriaActions.categoriaUpdate(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal("Categoria alterada com sucesso!", () => { })
+                        showDialogConfirmed("Categoria alterada com sucesso!", "success")
                         setCategoriaSelecionada(res.data)
                         setReload(true)
                     }
@@ -88,11 +91,11 @@ export const Categoria = () => {
     }
 
     const excluirCategoria = async () => {
-        const confirm = await OpenModalConfirm("Excluir categoria?")
+        const confirm = await showDialogResolve({title: '', message: 'Excluir categoria?'})
         if (confirm) {
             const res = await categoriaActions.categoriaExcluir(categoriaSelecionada._id)
             if (res?.status === 200) {
-                OpenModal("Categoria excluida com sucesso!", () => { })
+                showDialogConfirmed("Categoria excluida com sucesso!", "success")
                 setReload(true)
                 setCategoriaSelecionada(null)
             }
@@ -105,6 +108,7 @@ export const Categoria = () => {
     useEffect(() => {
         if (categoriaSelecionada != null) {
             reset(categoriaSelecionada)
+            window.scrollTo(0, 500)
         } else {
             reset({ ...initialValues })
         }

@@ -21,6 +21,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { useMunicipiosActions } from "../../actions/municipiosAction";
+import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
+import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
 
 interface FornecedorForm {
     nome: string,
@@ -43,11 +45,12 @@ export const Fornecedor = () => {
 
     const [reload, setReload] = useState<any>(false)
 
-
     // const [hasError, setHasError] = useState<boolean>(false)
 
     const [cardPesquisar, setCardPesquisar] = useState<boolean>(false)
 
+    const showDialogResolve = useResolveDialog()
+    const showDialogConfirmed = useAlertDialog()
 
     const initialValues = useMemo(() => {
         return {
@@ -74,11 +77,11 @@ export const Fornecedor = () => {
 
     const onSubmitFornecedor = async (data: any) => {
         if (fornecedorSelecionado === null) {
-            const confirm = await OpenModalConfirm("Cadastrar fornecedor?")
+            const confirm = await showDialogResolve({title: '', message: 'Cadastrar fornecedor?'})
             if (confirm) {
                 fornecedorActions.fornecedorInsert(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal(`Fornecedor cadastrado com sucesso!`, () => { })
+                        showDialogConfirmed("Fornecedor cadastrado com sucesso!", "success")
                         setReload(true)
                         reset({ ...initialValues })
                     }
@@ -89,11 +92,11 @@ export const Fornecedor = () => {
             }
         }
         else {
-            const confirm = await OpenModalConfirm("Alterar fornecedor?")
+            const confirm = await showDialogResolve({title: '', message: 'Alterar fornecedor?'})
             if (confirm) {
                 fornecedorActions.fornecedorUpdate(data).then((res: any) => {
                     if (res.status === 200) {
-                        OpenModal("Fornecedor alterado com sucesso!", () => { })
+                        showDialogConfirmed("Fornecedor alterado com sucesso!", "success")
                         setFornecedorSelecionado(res.data)
                         setReload(true)
                     }
@@ -106,11 +109,11 @@ export const Fornecedor = () => {
     }
 
     const excluirFornecedor = async () => {
-        const confirm = await OpenModalConfirm("Excluir fornecedor?")
+        const confirm = await showDialogResolve({title: '', message: 'Excluir fornecedor?'})
         if (confirm) {
             const res = await fornecedorActions.fornecedorExcluir(fornecedorSelecionado._id)
             if (res?.status === 200) {
-                OpenModal("Fornecedor excluido com sucesso!", () => { })
+                showDialogConfirmed("Fornecedor excluido com sucesso!", "success")
                 setReload(true)
                 setFornecedorSelecionado(null)
             }
@@ -123,6 +126,7 @@ export const Fornecedor = () => {
     useEffect(() => {
         if (fornecedorSelecionado != null) {
             reset(fornecedorSelecionado)
+            window.scrollTo(0, 500)
         } else {
             reset({ ...initialValues })
         }
