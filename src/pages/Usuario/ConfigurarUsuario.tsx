@@ -79,21 +79,6 @@ export const ConfigurarUsuario = () => {
         }
     }
 
-    async function handleImgChange(e: any) {
-        getBase64(e)
-    }
-
-    async function getBase64(event: any) {
-        let file = event.target.files[0];
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            setValue('foto', reader.result?.toString().replace(/^data:image\/[a-z]+;base64,/, ""))
-        };
-        reader.onerror = function () {
-            setValue('foto', null)
-        };
-    }
 
     return (
         <div>

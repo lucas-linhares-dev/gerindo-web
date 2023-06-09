@@ -194,7 +194,7 @@ export const Venda = () => {
 
                     <Box sx={{ margin: 2, marginTop: 4 }}>
                         <CardGeneric title="Dados da venda">
-                            <form onSubmit={handleSubmit(onSubmitVenda)}>
+                            <form onSubmit={handleSubmit(onSubmitVenda)} id="form-venda">
 
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
                                     <Grid item xs={12} md={9} lg={10} xl={3} >
@@ -222,7 +222,7 @@ export const Venda = () => {
 
                     <Grid item>
                         <Box sx={{ margin: 2, marginRight: 2.5, display: 'flex', justifyContent: 'flex-end' }}>
-                            <ButtonGeneric title={!vendaSelecionada ? 'cadastrar' : 'alterar'} disabledPadrao={!flagprodutosSalvos && !vendaSelecionada} />
+                            <ButtonGeneric title={!vendaSelecionada ? 'cadastrar' : 'alterar'} disabledPadrao={!flagprodutosSalvos && !vendaSelecionada} form={'form-venda'}  />
                         </Box>
                     </Grid>
                 </Grid>
