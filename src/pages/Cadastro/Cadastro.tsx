@@ -9,7 +9,7 @@ import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
 import { AlertError } from "../../components/helpers/AlertError";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import LOGO_AZUL from '../../imgs/logo_azul.png'
 import LOGO_BRANCA from '../../imgs/logo_branca.png'
@@ -29,6 +29,8 @@ export const Cadastro = () => {
     const usuarioActions = UsuarioActions()
 
     const [hasError, setHasError] = useState<boolean>(false)
+
+    const [cadastrado, setCadastrado] = useState<boolean>(false)
 
     const showDialogConfirmed = useAlertDialog()
 
@@ -53,10 +55,10 @@ export const Cadastro = () => {
     const onSubmitCadastro = async (data: any) => {
         console.log("SUBMIT")
         if (data.senha === data.senhaConfirm) {
-            usuarioActions.usuarioInsert(data).then((res: any) => {
+            usuarioActions.usuarioInsert(data).then(async (res: any) => {
                 if (res.status === 200) {
-                    showDialogConfirmed(`Seja bem vindo ${res.data.nome}!`, "success")
-                    window.location.href = 'http://localhost:3000/'
+                    await showDialogConfirmed(`Seja bem vindo ${res.data.nome}!`, "success")
+                    setCadastrado(true)
                 }
                 else {
                     console.log("ERROS BACK END")
@@ -68,6 +70,10 @@ export const Cadastro = () => {
         }
     }
 
+    useEffect(() => {
+        window.location.href = 'http://localhost:3000/'
+    }, [cadastrado])
+    
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmitCadastro)}>

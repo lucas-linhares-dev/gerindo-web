@@ -8,7 +8,7 @@ import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertError } from "../../components/helpers/AlertError";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import LOGO_AZUL from '../../imgs/logo_azul.png'
@@ -27,6 +27,7 @@ export const Login = () => {
 
     const [hasError, setHasError] = useState<boolean>(false)
     const [msgError, setMsgError] = useState<any>(false)
+    const [logado, setLogado] = useState<boolean>(false)
 
     const showDialogConfirmed = useAlertDialog()
 
@@ -43,11 +44,11 @@ export const Login = () => {
     })
 
     const onSubmitLogin = async (data: any) => {
-        usuarioActions.usuarioAuth(data).then((res: any) => {
+        usuarioActions.usuarioAuth(data).then(async (res: any) => {
             if (res.status === 200) {
                 localStorage.setItem('usuarioLogado', JSON.stringify(res.data));
                 showDialogConfirmed(`Bom tê-lo de volta ${res.data.nome}!`, "success")
-                window.location.href = 'http://localhost:3000/pagina_inicial'
+                setLogado(true)
             }
             else {
                 setMsgError(res.response.data.msg)
@@ -55,6 +56,12 @@ export const Login = () => {
             }
         })
     }
+
+    useEffect(() => {
+        if(logado){
+            window.location.href = 'http://localhost:3000/pagina_inicial'
+        }
+    }, [logado])
 
     return (
         <>
