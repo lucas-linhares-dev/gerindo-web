@@ -71,9 +71,10 @@ export const Cadastro = () => {
     }
 
     useEffect(() => {
+        if(cadastrado)
         window.location.href = 'http://localhost:3000/'
     }, [cadastrado])
-    
+
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmitCadastro)}>
