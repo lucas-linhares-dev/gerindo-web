@@ -1,18 +1,13 @@
 
-import { Box, Button, Card, CardContent, Grid, IconButton, TextField, Tooltip, Typography, createTheme } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import { Card, CardContent, Grid } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { UsuarioActions } from "../../actions/UsuarioActions";
-import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { AlertError } from "../../components/helpers/AlertError";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
-import SearchIcon from '@mui/icons-material/Search';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import FindInPageIcon from '@mui/icons-material/FindInPage';
 import { InputImage } from "../../components/Input/InputImage";
 import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
 import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";

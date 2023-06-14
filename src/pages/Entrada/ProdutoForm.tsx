@@ -1,11 +1,10 @@
 
-import { Box, Button, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { AlertError } from "../../components/helpers/AlertError";
 import { useEffect, useMemo, useRef, useState } from "react";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -13,11 +12,8 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { ProdutoActions } from "../../actions/ProdutoActions";
 import { produtoPageState, produtoRowsPerPageState, produtoSearchAtom, produtoSelectorNome } from "../../states/ProdutoState";
 import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
-import { fornecedorSelector } from "../../states/FornecedorState";
 import { categoriaSelector } from "../../states/CategoriaState";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
-import { executeScroll } from "../../components/helpers/ExecuteScroll";
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { useErrorDialog } from "../../components/Dialogs/DialogProviderError";
 

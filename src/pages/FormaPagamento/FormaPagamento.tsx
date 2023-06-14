@@ -1,19 +1,14 @@
 
-import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Collapse, Grid, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { OpenModal } from "../../components/helpers/OpenModal";
-import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { AlertError } from "../../components/helpers/AlertError";
 import { useEffect, useState } from "react";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
-import { useRecoilState } from "recoil";
 import { FormaPagamentoActions } from "../../actions/FormaPagamentoActions";
 import { formaPagamentoPageState, formaPagamentoRowsPerPageState, formaPagamentoSearchAtom, formaPagamentoSelectorNome } from "../../states/FormaPagamentoState";
 import { CardGeneric } from "../../components/Card/CardGeneric";

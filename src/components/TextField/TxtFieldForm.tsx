@@ -86,25 +86,25 @@ export const TxtFieldForm = ( props : ITxtFieldForm) => {
                         label={props.label}
                         onChange={(e) => {
                             let value = e.target.value
-                        
 
                             if(props.type === 'decimal'){
                                 value = decimalDigitsMask(value, 2)
                             }
-                            if(props.mask === 'cpf'){
-                                value = formatCPFMask(value)
-                                // console.log(value)
+                            if(props.mask){
+                                if(props.mask === 'cpf'){
+                                    value = formatCPFMask(value)
+                                    // console.log(value)
+                                }
+                                if(props.mask === 'cnpj'){
+                                    value = formatCNPJMask(value)
+                                }
+                                if(props.mask === 'telefone'){
+                                    value = formatPhone(value)
+                                }
+                                if(props.mask === 'cep'){
+                                    value = formatCEPMask(value)
+                                }
                             }
-                            if(props.mask === 'cnpj'){
-                                value = formatCNPJMask(value)
-                            }
-                            if(props.mask === 'telefone'){
-                                value = formatPhone(value)
-                            }
-                            if(props.mask === 'cep'){
-                                value = formatCEPMask(value)
-                            }
-
                             onChange(value)
                         }}
                         onBlur={props.onBlur || undefined}

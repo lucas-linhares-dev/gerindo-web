@@ -1,17 +1,13 @@
 
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { UsuarioActions } from "../../actions/UsuarioActions";
-import { OpenModal } from "../../components/helpers/OpenModal";
-import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
 import { useEffect, useState } from "react";
 import { AlertError } from "../../components/helpers/AlertError";
-import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
-import LOGO_AZUL from '../../imgs/logo_azul.png'
 import LOGO_BRANCA from '../../imgs/logo_branca.png'
 import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
 

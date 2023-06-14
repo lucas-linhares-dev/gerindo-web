@@ -1,12 +1,10 @@
 
-import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Collapse, Grid, IconButton,} from "@mui/material";
 import { useForm } from "react-hook-form";
-import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { AlertError } from "../../components/helpers/AlertError";
 import { useEffect, useState } from "react";
 import { CategoriaActions } from "../../actions/CategoriaActions";
 import TableGeneric from "../../components/Table/TableGeneric";

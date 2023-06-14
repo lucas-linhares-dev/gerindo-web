@@ -1,24 +1,15 @@
 
 
-import { Box, Card, CardContent, Collapse, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Collapse, Grid, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { OpenModal } from "../../components/helpers/OpenModal";
-import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { AlertError } from "../../components/helpers/AlertError";
 import { useEffect, useState } from "react";
-import { CategoriaActions } from "../../actions/CategoriaActions";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import { ProdutoActions } from "../../actions/ProdutoActions";
-import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
-import { FornecedorActions } from "../../actions/FornecedorActions";
-import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, fornecedorSelector, fornecedorSelectorNome } from "../../states/FornecedorState";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { ClienteActions } from "../../actions/ClienteActions";
 import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelectorNome } from "../../states/ClienteState";
 import { CardGeneric } from "../../components/Card/CardGeneric";
@@ -186,16 +177,16 @@ export const Cliente = () => {
                     <Box sx={{ margin: 2, marginTop: 4 }}>
                             <CardGeneric title="Informações pessoais">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item xs={12} md={4.75} lg={4.5} xl={5}>
+                                    <Grid item xs={12} md={6} lg={4.5} xl={5}>
                                         <TxtFieldForm name={"nome"} control={control} label={"Nome"} error={errors.nome?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={4.75} lg={3} xl={4}>
+                                    <Grid item xs={12} md={6} lg={3} xl={4}>
                                         <TxtFieldForm name={"email"} control={control} label={"E-mail"} error={errors.email?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={2.5} lg={2} xl={1.5}>
+                                    <Grid item xs={12} md={6} lg={2} xl={1.5}>
                                         <TxtFieldForm name={"telefone"} control={control} label={"Telefone"} mask={'telefone'} error={errors.telefone?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={3} lg={2.5} xl={1.5}>
+                                    <Grid item xs={12} md={6} lg={2.5} xl={1.5}>
                                         <TxtFieldForm name={"cpf"} control={control} label={"CPF"} textAlign={'right'} mask="cpf" error={errors.cpf?.message} />
                                     </Grid>
                                     
@@ -209,7 +200,7 @@ export const Cliente = () => {
                                     <Grid item xs={12} md={2.5} lg={1.5} xl={1}>
                                         <TxtFieldForm name={"cep"} control={control} label={"CEP"} mask="cep" onBlur={onBlurCEP} error={errors.cep?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={6.5} lg={3} xl={3}>
+                                    <Grid item xs={12} md={9.5} lg={3} xl={3}>
                                         <TxtFieldForm name={"endereco"} control={control} label={"Endereço"} error={errors.endereco?.message} />
                                     </Grid>
                                     <Grid item xs={12} md={4} lg={2.5} xl={2}>

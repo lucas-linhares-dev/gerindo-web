@@ -1,36 +1,23 @@
 
 
-import { Box, Card, CardContent, Collapse, Grid, Icon, IconButton, Typography } from "@mui/material";
+import { Box, Collapse, Grid, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { OpenModal } from "../../components/helpers/OpenModal";
-import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { AlertError } from "../../components/helpers/AlertError";
 import { useEffect, useMemo, useState } from "react";
-import { CategoriaActions } from "../../actions/CategoriaActions";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import { ProdutoActions } from "../../actions/ProdutoActions";
-import { OpenModalConfirm } from "../../components/helpers/OpenModalConfirm";
-import { FornecedorActions } from "../../actions/FornecedorActions";
-import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, fornecedorSelector, fornecedorSelectorNome } from "../../states/FornecedorState";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { ClienteActions } from "../../actions/ClienteActions";
-import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelector, clienteSelectorNome } from "../../states/ClienteState";
+import {clienteSelector } from "../../states/ClienteState";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
-import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
 import { getData } from "../../components/helpers/getDataHora";
-import { EntradaActions } from "../../actions/EntradaActions";
-import { entradaPageState, entradaRowsPerPageState, entradaSearchAtom, entradaSelectorCodigo } from "../../states/EntradaState";
 import { formaPagamentoSelector } from "../../states/FormaPagamentoState";
 import { ProdutoForm } from "../Entrada/ProdutoForm";
-import { vendaFilterAtom, vendaPageState, vendaRowsPerPageState, vendaSearchAtom, vendaSelectorCodigo, vendaSelectorFilter } from "../../states/VendaState";
+import { vendaFilterAtom, vendaPageState, vendaRowsPerPageState, vendaSelectorFilter } from "../../states/VendaState";
 import { VendaActions } from "../../actions/VendaActions";
 import { decimalDigitsMask } from "../../components/helpers/masks";
 import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";

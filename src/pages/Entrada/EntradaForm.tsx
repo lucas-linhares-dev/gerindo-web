@@ -1,35 +1,25 @@
 
-import { Box, Card, CardContent, Collapse, Grid, Icon, IconButton, Typography } from "@mui/material";
+import { Box, Collapse, Grid, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { Header } from "../../components/NavBar/Header";
 import { TxtFieldForm } from "../../components/TextField/TxtFieldForm";
 import { ButtonGeneric } from "../../components/Button/ButtonGeneric";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup'
-import { AlertError } from "../../components/helpers/AlertError";
 import { useEffect, useMemo, useState } from "react";
-import { CategoriaActions } from "../../actions/CategoriaActions";
 import TableGeneric from "../../components/Table/TableGeneric";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import { ProdutoActions } from "../../actions/ProdutoActions";
-import { FornecedorActions } from "../../actions/FornecedorActions";
-import { fornecedorPageState, fornecedorRowsPerPageState, fornecedorSearchAtom, fornecedorSelector, fornecedorSelectorNome } from "../../states/FornecedorState";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { ClienteActions } from "../../actions/ClienteActions";
-import { clientePageState, clienteRowsPerPageState, clienteSearchAtom, clienteSelector, clienteSelectorNome } from "../../states/ClienteState";
 import { ProdutoForm } from "./ProdutoForm";
 import { TitlePageGeneric } from "../../components/Typographys/TitlePageGeneric";
-import { TitleCardGeneric } from "../../components/Typographys/TitleCardGeneric";
 import { CardGeneric } from "../../components/Card/CardGeneric";
 import { GetAutoCompleteForm } from "../../components/AutoComplete/GetAutoCompleteForm";
 import { getData } from "../../components/helpers/getDataHora";
 import { EntradaActions } from "../../actions/EntradaActions";
-import { entradaFilterAtom, entradaPageState, entradaRowsPerPageState, entradaSearchAtom, entradaSelectorCodigo, entradaSelectorFilter } from "../../states/EntradaState";
+import { entradaFilterAtom, entradaPageState, entradaRowsPerPageState, entradaSelectorFilter } from "../../states/EntradaState";
 import { decimalDigitsMask } from "../../components/helpers/masks";
 import { useAlertDialog } from "../../components/Dialogs/DialogProviderAlert";
 import { useResolveDialog } from "../../components/Dialogs/DialogProviderResolve";
-import { useErrorDialog } from "../../components/Dialogs/DialogProviderError";
+import { fornecedorSelector } from "../../states/FornecedorState";
 
 export interface EntradaForm {
     codigo: string,
@@ -183,16 +173,16 @@ export const Entrada = () => {
                         <Box sx={{ margin: 2, marginTop: 4 }}>
                             <CardGeneric title="Dados da entrada">
                                 <Grid container direction={'row'} spacing={1.5} sx={{ marginTop: 1 }}>
-                                    <Grid item xs={12} md={10} lg={4} xl={4} >
+                                    <Grid item xs={12} md={9} lg={4} xl={4} >
                                         <TxtFieldForm name={"codigo"} control={control} label={"Codigo"} error={errors.codigo?.message} />
                                     </Grid>
-                                    <Grid item xs={12} md={2} lg={2} xl={2} >
+                                    <Grid item xs={12} md={3} lg={2} xl={2} >
                                         <TxtFieldForm name={"data"} control={control} label={"Data"} error={errors.data?.message} type={'date'} readOnly={entradaSelecionada} />
                                     </Grid>
-                                    <Grid item xs={12} md={10} lg={4} xl={4} >
+                                    <Grid item xs={12} md={9} lg={4} xl={4} >
                                         <GetAutoCompleteForm label={"Fornecedor"} name={"fornecedor"} control={control} selector={fornecedorSelector} optionLabel={"nome"} />
                                     </Grid>
-                                    <Grid item xs={12} md={2} lg={2} xl={2} >
+                                    <Grid item xs={12} md={3} lg={2} xl={2} >
                                         <TxtFieldForm name={"vlr_total"} control={control} label={"Vlr. total"} type="decimal" error={errors.vlr_total?.message} readOnly={entradaSelecionada} />
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={12} xl={12} >
