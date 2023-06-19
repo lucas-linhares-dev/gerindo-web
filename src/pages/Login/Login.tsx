@@ -89,7 +89,7 @@ export const Login = () => {
                                         </Grid>
                                 </Box>
                                 <Box sx={{textAlign: 'center'}}>
-                                    <Typography fontFamily= {'Kanit, sans-serif;'} fontWeight={'bold'} sx={{marginBottom: 2}}>Ainda não se registrou?</Typography>
+                                    <Typography fontFamily= {'Kanit, sans-serif;'} fontWeight={'bold'} sx={{marginBottom: 2}}>Ainda não se cadastrou?</Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', justifyContent: 'center', alignContent: 'center'}}>
                                     <ButtonGeneric title={"CRIAR CONTA"} typeIcon="entrar" backgroundColor={"#f5f5f5"} color={"#006666"} backgroundColorHover={'#008584'} colorHover='#f5f5f5' width="300px" onClick={() => {window.location.href = 'http://localhost:3000/cadastro'}} type="button"/>
